@@ -1,3 +1,7 @@
-import { hello } from "./sub";
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-hello();
+ReactDOM.render(
+  <h1>Hello, world!!!!</h1>,
+  document.getElementById('root')
+);
