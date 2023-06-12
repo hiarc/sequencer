@@ -13,6 +13,12 @@
 ## 環境構築
 
 ```
+# 初回のみ
 npm install
+
+# ソースビルド
 npm run build
+
+# 開発用サーバーの起動（localhost:3000）
+npm start
 ```
