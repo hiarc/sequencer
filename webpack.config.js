@@ -23,6 +23,9 @@ module.exports = {
     rules: [
       { test: /\.tsx?$/, loader: 'ts-loader' },
       { test: /\.css$/, use: ['style-loader', 'css-loader']},
+      { mimetype: 'image/svg+xml', scheme: 'data', type: 'asset/resource', 
+        generator: { filename: 'icons/[hash].svg'}
+      },
     ]
   },
   plugins: [
