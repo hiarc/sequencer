@@ -5,6 +5,7 @@ import Track, {Tracks} from './domain/track';
 import { TrackPanels } from './component/track-panels';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import '/src/css/bootstrap-customize.css';
 
 const container = document.getElementById('header');
 const header = createRoot(container);
