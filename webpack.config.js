@@ -4,7 +4,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   mode: 'development',
-  entry: '/src/js/index.tsx',
+  entry: '/src/typescript/index.tsx',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].[contenthash].js'
@@ -16,7 +16,7 @@ module.exports = {
     }
   },
   resolve: {
-    modules: [path.resolve(__dirname, "src", "js"), "node_modules"],
+    modules: [path.resolve(__dirname, "src", "typescript"), "node_modules"],
     extensions: ['.ts', '.tsx', '.js']
   },
   module: {
