@@ -4,7 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
-export const Header: React.FunctionComponent<{ compiler: string, framework: string }> = (props) => {
+export const Header: React.FunctionComponent<{}> = (props) => {
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container>

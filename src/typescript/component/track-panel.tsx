@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { ListGroup } from 'react-bootstrap';
 import Track from '../domain/track';
-import 'bootstrap-icons/font/bootstrap-icons.css';
 
 export const TrackPanel: React.FunctionComponent<{track: Track}> = (props) => {
   return (

@@ -1,3 +1,12 @@
+.container-fluid{
+  --bs-gutter-x: 0;
+  --bs-gutter-y: 0;
+}
+
+.row{
+  --bs-gutter-x: 0;
+  --bs-gutter-y: 0;
+}
 .list-group{
   --bs-border-radius: 0;
   --bs-border-radius-sm: 0;
@@ -6,4 +15,10 @@
   --bs-border-radius-xxl: 0;
   --bs-border-radius-2xl: 0;
   --bs-border-radius-pill: 0;
+}
+
+.list-group-item{
+  --bs-list-group-border-width: 0;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
 }
