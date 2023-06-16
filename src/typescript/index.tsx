@@ -7,14 +7,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import '/src/css/bootstrap-customize.css';
 import { Col, Container, Row } from 'react-bootstrap';
+import { PianoRoll } from './component/piano-roll';
+import Notes from './domain/notes';
 
 const container = document.getElementById('container');
 const header = createRoot(container);
-// TODO:初期データの準備
-const tracks: Tracks = Tracks.empty();
-tracks.add();
-tracks.add();
-tracks.add();
+const tracks: Tracks = Tracks.default();
+
+const notes: Notes = Notes.empty();
 
 header.render(
   <>
@@ -25,7 +25,7 @@ header.render(
           <TrackPanels tracks={tracks} />
         </Col>
         <Col lg="10">
-          <TrackPanels tracks={tracks} />
+          <PianoRoll notes={notes} />
         </Col>
       </Row>
     </Container>

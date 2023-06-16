@@ -24,8 +24,15 @@ export class Tracks {
   public static empty(): Tracks {
     return new Tracks([]);
   }
-  public add(): void {
-    const track = new Track(this.size + 1);
+  public static default(): Tracks {
+    let tracks = this.empty();
+    for(let idx = 1; idx <= 16; idx++){
+      tracks.add(tracks.size + 1);
+    }
+    return tracks;
+  }
+  public add(no: number): void {
+    const track = new Track(no);
     this.tracks.push(track);
   }
   public get asList(): Track[]{
