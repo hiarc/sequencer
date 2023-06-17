@@ -6,6 +6,7 @@ import { TrackPanels } from './component/track-panels';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import '/src/css/bootstrap-customize.css';
+import '/src/css/sequenser.css';
 import { Col, Container, Row } from 'react-bootstrap';
 import { PianoRoll } from './component/piano-roll';
 import Notes from './domain/notes';
