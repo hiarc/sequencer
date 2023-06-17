@@ -1,3 +1,5 @@
+import {Event} from './event';
+
 export default class Notes {
   notes: Note[];
 
@@ -12,7 +14,7 @@ export default class Notes {
 
 export class Note {
   eventAt: number;
-  type: string;
+  type: Event;
   pitch: number;
   duration: number;
 }
