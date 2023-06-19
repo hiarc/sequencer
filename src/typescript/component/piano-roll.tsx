@@ -8,14 +8,14 @@ export const PianoRoll: React.FunctionComponent<{notes: Notes}> = (props) => {
         <svg xmlns="http://www.w3.org/2000/svg" width="1240" height="1240">
         {
           (function(){
-            const span = [];
+            const paths = [];
             for(let i = 1; i <= 60; i++){
-              const m = "M 0 "
-              const l = " L 1240 "
-              const color = i % 12 === 0 ? "red" : "gray"
-              span.push(<path d={m + i * 15 + l + i * 15} stroke={color} strokeWidth={1} key={"pianoroll-horizon" + i}/>)
+              const direction = `M 0 ${i * 15} L 1240 ${i * 15}`;
+              const color = i % 12 === 0 ? "red" : "gray";
+              const path = <path d={direction} stroke={color} strokeWidth={1} key={"pianoroll-horizon" + i}/>;
+              paths.push(path);
             }
-             return span;
+             return paths;
           }())
         }
         </svg>
