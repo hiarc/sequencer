@@ -13,7 +13,7 @@ export const PianoRoll: React.FunctionComponent<{notes: Notes}> = (props) => {
               const m = "M 0 "
               const l = " L 1240 "
               const color = i % 12 === 0 ? "red" : "gray"
-              span.push(<path d={m + i * 15 + l + i * 15} stroke={color} strokeWidth={1}/>)
+              span.push(<path d={m + i * 15 + l + i * 15} stroke={color} strokeWidth={1} key={"pianoroll-horizon" + i}/>)
             }
              return span;
           }())
