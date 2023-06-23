@@ -4,6 +4,8 @@
 
 - Python 3.11.4
 - FastAPI
+- MySQL 8.0
+- SQLAlchemy 2.0.17
 - Typescript 5.1.3
 - React 18.2.0
 - bootstrap 5.3.0
@@ -29,6 +31,10 @@ npm start
 
 # DBサーバーの起動（localhost:33306）
 docker compose up -d db
+
+# FastAPI、SQLAlchemyのインストール
+pip3 install "fastapi[all]"
+pip3 install sqlalchemy
 
 # アプリケーションサーバーの起動（localhost:8000）
 cd /{ルートディレクトリ}/src/python
