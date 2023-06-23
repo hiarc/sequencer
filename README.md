@@ -18,12 +18,19 @@
 3. ルートディレクトリで以下のコマンドを実行する
 
 ```
-# 初回のみ
+# 初回のみ：フロントエンドのライブラリインストール
 npm install
 
-# ソースビルド
+# フロントエンドのソースビルド
 npm run build
 
-# 開発用サーバーの起動（localhost:3000）
+# 開発用：フロントエンドサーバーの起動（localhost:3000）
 npm start
+
+# DBサーバーの起動（localhost:33306）
+docker compose up -d db
+
+# アプリケーションサーバーの起動（localhost:8000）
+cd /{ルートディレクトリ}/src/python
+uvicorn main:app --reload
 ```
