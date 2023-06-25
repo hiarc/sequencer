@@ -1,4 +1,4 @@
-import ChannelVoiceMessage from "./channel-voice-message";
+import { ChannelVoiceMessage } from "../../interface";
 
 /**
  * ノートオンメッセージを表すクラス。
