@@ -6,11 +6,11 @@ import { ChannelVoiceMessage } from "../../interface";
 export default class NoteOn implements ChannelVoiceMessage {
   noteNumber: NoteNumber;
   duration: Duration;
+  
   constructor(noteNumber: number, duration: number){
     this.noteNumber = new NoteNumber(noteNumber);
     this.duration = new Duration(duration);
   }
-  
 }
 
 /**
