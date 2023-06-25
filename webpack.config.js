@@ -12,12 +12,15 @@ module.exports = {
   devServer: {
     port: 3000,
     static: {
-      directory: path.resolve(__dirname, "./dist"),
+      directory: path.resolve(__dirname, './dist'),
     }
   },
   resolve: {
-    modules: [path.resolve(__dirname, "src", "typescript"), "node_modules"],
-    extensions: ['.ts', '.tsx', '.js']
+    modules: [
+      path.resolve(__dirname, 'src', 'typescript'),
+      'node_modules'
+    ],
+    extensions: ['.ts', '.tsx', '.js'],
   },
   module: {
     rules: [
@@ -30,6 +33,6 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin({cleanAfterEveryBuildPatterns: ['dist']}),
-    new HtmlWebpackPlugin({template: path.resolve(__dirname, "src", "html", "index.html")})
+    new HtmlWebpackPlugin({template: path.resolve(__dirname, 'src', 'html', 'index.html')})
   ]
 };
