@@ -1,8 +1,8 @@
 import * as React from 'react';
-import Notes from '../domain/notes';
+import NoteOn from '../domain/message/channel/voice/note-on';
 
 
-export const PianoRoll: React.FunctionComponent<{notes: Notes}> = (props) => {
+export const PianoRoll: React.FunctionComponent<{notes: NoteOn[]}> = (props) => {
   return (
       <div className="bg-svg" {...props}>
         <svg xmlns="http://www.w3.org/2000/svg" width="1240" height="1240">

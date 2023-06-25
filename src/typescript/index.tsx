@@ -9,13 +9,12 @@ import '/src/css/bootstrap-customize.css';
 import '/src/css/sequenser.css';
 import { Col, Container, Row } from 'react-bootstrap';
 import { PianoRoll } from './component/piano-roll';
-import Notes from './domain/notes';
 
 const container = document.getElementById('container');
 const header = createRoot(container);
 const tracks: Tracks = Tracks.default();
 
-const notes: Notes = Notes.empty();
+const notes = [];
 
 header.render(
   <>
