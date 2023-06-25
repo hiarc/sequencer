@@ -1,11 +1,10 @@
 import * as React from 'react';
-import NoteOn from '../domain/message/channel/voice/note-on';
 import { Message } from '../domain/message/interface';
 
 export const PianoRoll: React.FunctionComponent<{notes: Message[]}> = (props) => {
   return (
-      <div className="bg-svg" {...props}>
-        <svg xmlns="http://www.w3.org/2000/svg" width="1240" height="1240">
+      <div className="piano-roll" {...props}>
+        <svg xmlns="http://www.w3.org/2000/svg" id="piano-roll" width="1240" height="1240" onClick={onClick}>
         {
           (function(){
             const paths = [];
@@ -21,4 +20,15 @@ export const PianoRoll: React.FunctionComponent<{notes: Message[]}> = (props) =>
         </svg>
       </div>
   );
+}
+
+const onClick = (window) => {
+  const pianoRoll = document.getElementById('piano-roll');
+  if(!pianoRoll){
+    return;
+  }
+
+  const rect = pianoRoll.getBoundingClientRect();
+  const clickY = window.pageY - (rect.top + scrollY);
+  const clickX = window.pageX - (rect.left + scrollX);
 }
