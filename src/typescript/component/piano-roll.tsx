@@ -4,13 +4,13 @@ import { Message } from '../domain/message/interface';
 export const PianoRoll: React.FunctionComponent<{notes: Message[]}> = (props) => {
   return (
       <div className="piano-roll" {...props}>
-        <svg xmlns="http://www.w3.org/2000/svg" id="piano-roll" width="1240" height="1240" onClick={onClick}>
+        <svg xmlns="http://www.w3.org/2000/svg" id="piano-roll" width="1240" height="2480" onClick={onClick}>
         {
           // 平行線の描画。
           // 1オクターブ（12音）毎に赤線で区切る。
           (function(){
             const paths = [];
-            for(let i = 1; i <= 60; i++){
+            for(let i = 1; i <= 128; i++){
               const direction = `M 0 ${i * 15} L 1240 ${i * 15}`;
               const color = i % 12 === 0 ? "red" : "gray";
               const path = <path d={direction} stroke={color} strokeWidth={1} key={"pianoroll-horizon" + i}/>;
@@ -25,7 +25,7 @@ export const PianoRoll: React.FunctionComponent<{notes: Message[]}> = (props) =>
           (function(){
             const paths = [];
             for(let i = 1; i <= 60; i++){
-              const direction = `M ${i * 50} 0 L ${i * 50} 1240`;
+              const direction = `M ${i * 50} 0 L ${i * 50} 2480`;
               const color = i % 8 === 0 ? "white" : "gray";
               const path = <path d={direction} stroke={color} strokeWidth={1} key={"pianoroll-vertical" + i}/>;
               paths.push(path);
