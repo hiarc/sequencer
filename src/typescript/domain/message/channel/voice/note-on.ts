@@ -3,21 +3,24 @@ import { ChannelVoiceMessage } from "../../interface";
 /**
  * ノートオンメッセージを表すクラス。
  */
-export default class NoteOn implements ChannelVoiceMessage {
+export default class NoteOnMessage implements ChannelVoiceMessage {
   noteNumber: NoteNumber;
+  startedOn: StartedOn;
   duration: Duration;
   
-  constructor(noteNumber: number, duration: number){
+  constructor(noteNumber: number, startOn: number, duration: number){
     this.noteNumber = new NoteNumber(noteNumber);
+    this.startedOn = new StartedOn(startOn);
     this.duration = new Duration(duration);
   }
 }
 
 /**
- * ノート番号。
- * デフォルトは60（中央のド）
+ * ノートナンバー。音程のこと。
+ * 0を最も低い音程とする。最高は127。
+ * デフォルトは60。中央のドを表す
  */
-export class NoteNumber {
+class NoteNumber {
   noteNumber: number = 60;
 
   constructor(noteNumber: number){
@@ -29,10 +32,24 @@ export class NoteNumber {
 }
 
 /**
+ * ノートオンを開始する、シーケンサー上のタイミング。
+ */
+class StartedOn {
+  startedOn: number = 0;
+  
+  constructor(startedOn: number){
+    if(startedOn < 0){
+      throw new Error("Illegal Number Of 'StartedOn'. The Number must be greater than 0.");
+    }
+    this.startedOn = startedOn;
+  }
+}
+
+/**
  * 発声時間。
  * ノートオンからノートオフまでの間とする。
  */
-export class Duration {
+class Duration {
   duration: number = 0;
   
   constructor(duration: number){

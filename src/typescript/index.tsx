@@ -14,7 +14,8 @@ const container = document.getElementById('container');
 const header = createRoot(container);
 const tracks: Tracks = Tracks.default();
 
-const notes = [];
+// TODO: piano-roll.tsx コンポーネントから親コンポーネントの属性を操作する正しい方法の調査
+export const notes = [];
 
 header.render(
   <>
