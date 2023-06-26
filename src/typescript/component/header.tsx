@@ -6,7 +6,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 
 export const Header: React.FunctionComponent<{}> = (props) => {
   return (
-    <Navbar bg="dark" variant="dark" expand="lg">
+    <Navbar bg="dark" variant="dark" expand="lg" className='header'>
       <Container>
         <Navbar.Brand href="#home">SoundStadio</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />

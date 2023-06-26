@@ -1,3 +1,7 @@
+.header{
+  position: sticky;
+}
+
 .piano-roll{
   background-color: rgb(50,50,50);
   height: 800px;
