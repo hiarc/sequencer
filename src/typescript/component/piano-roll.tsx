@@ -78,7 +78,6 @@ export const PianoRoll: React.FunctionComponent<{messages: NoteOnMessage[], addM
  */
 const horizontalPaths = [];
 for(let i = 1; i <= 128; i++){
-  console.log('horizontal' + i);
   const direction = `M 0 ${i * X_LINE_SPACING} L 1240 ${i * X_LINE_SPACING}`;
   const color = i % 12 === 0 ? "red" : "gray";
   const path = <path d={direction} stroke={color} strokeWidth={1} key={"pianoroll-horizon" + i}/>;
@@ -91,7 +90,6 @@ for(let i = 1; i <= 128; i++){
  */
 const verticalPaths = [];
 for(let i = 1; i <= 60; i++){
-  console.log('vertical' + i);
   const direction = `M ${i * Y_LINE_SPACING} 0 L ${i * Y_LINE_SPACING} 2480`;
   const color = i % 8 === 0 ? "white" : "gray";
   const path = <path d={direction} stroke={color} strokeWidth={1} key={"pianoroll-vertical" + i}/>;
