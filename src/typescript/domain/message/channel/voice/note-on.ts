@@ -21,13 +21,13 @@ export default class NoteOnMessage implements ChannelVoiceMessage {
  * デフォルトは60。中央のドを表す
  */
 class NoteNumber {
-  noteNumber: number = 60;
+  value: number = 60;
 
   constructor(noteNumber: number){
     if(noteNumber < 0 || noteNumber > 127){
       throw new Error("Illegal NoteNumber. NoteNumber must be between 0-127.");
     }
-    this.noteNumber = noteNumber;
+    this.value = noteNumber;
   }
 }
 
@@ -35,13 +35,13 @@ class NoteNumber {
  * ノートオンを開始する、シーケンサー上のタイミング。
  */
 class StartedOn {
-  startedOn: number = 0;
+  value: number = 0;
   
   constructor(startedOn: number){
     if(startedOn < 0){
       throw new Error("Illegal Number Of 'StartedOn'. The Number must be greater than 0.");
     }
-    this.startedOn = startedOn;
+    this.value = startedOn;
   }
 }
 
@@ -50,12 +50,12 @@ class StartedOn {
  * ノートオンからノートオフまでの間とする。
  */
 class Duration {
-  duration: number = 0;
+  value: number = 0;
   
   constructor(duration: number){
     if(duration < 0){
       throw new Error("Illegal Duration. Duration must be greater than 0.");
     }
-    this.duration = duration;
+    this.value = duration;
   }
 }
