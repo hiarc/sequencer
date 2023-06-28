@@ -6,6 +6,7 @@
 - FastAPI
 - MySQL 8.0
 - SQLAlchemy 2.0.17
+- Mido 1.2.10
 - Typescript 5.1.3
 - React 18.2.0
 - bootstrap 5.3.0
@@ -20,7 +21,13 @@
 2. リポジトリをクローンする
 3. ルートディレクトリで以下のコマンドを実行する
 
-```
+```shell
+# FastAPI、SQLAlchemy, Midoのインストール
+pip3 install "fastapi[all]" sqlalchemy mido
+
+# DBサーバーの起動（localhost:33306）
+docker compose up -d db
+
 # 初回のみ：フロントエンドのライブラリインストール
 npm install
 
@@ -29,13 +36,6 @@ npm run build
 
 # 開発用：フロントエンドサーバーの起動（localhost:3000）
 npm start
-
-# DBサーバーの起動（localhost:33306）
-docker compose up -d db
-
-# FastAPI、SQLAlchemyのインストール
-pip3 install "fastapi[all]"
-pip3 install sqlalchemy
 
 # アプリケーションサーバーの起動（localhost:8000）
 cd /{ルートディレクトリ}/src/python
