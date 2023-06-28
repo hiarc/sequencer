@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from presentation.parameter import NoteOnMessageParameter
-
+from presentation.routers import router
 
 app = FastAPI()
 
@@ -13,8 +12,4 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-@app.post("/v1.0/player")
-async def createTrack(messages: list[NoteOnMessageParameter]):
-    for message in messages:
-        print(message)
+app.include_router(router)
