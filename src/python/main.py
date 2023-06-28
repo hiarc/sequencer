@@ -1,23 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-
-
-class NoteOnMessage(BaseModel):
-    noteNumber: int
-    startedOn: int
-    duration: int
+from presentation.parameter import NoteOnMessageParameter
 
 
 app = FastAPI()
 
-origins = [
-    "http://localhost:3000",
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -25,6 +15,6 @@ app.add_middleware(
 
 
 @app.post("/v1.0/player")
-async def createTrack(messages: list[NoteOnMessage]):
+async def createTrack(messages: list[NoteOnMessageParameter]):
     for message in messages:
         print(message)
