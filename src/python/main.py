@@ -1,14 +1,30 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-class Track(BaseModel):
-  no: int
-  name: str
-  instrumentId: int
-  sequenseId: int
+
+class NoteOnMessage(BaseModel):
+    noteNumber: int
+    startedOn: int
+    duration: int
+
 
 app = FastAPI()
 
-@app.post("/v1.0/tracks")
-async def createTrack(track: Track):
-  return track
+origins = [
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.post("/v1.0/player")
+async def createTrack(messages: list[NoteOnMessage]):
+    for message in messages:
+        print(message)
