@@ -9,6 +9,7 @@
 - Typescript 5.1.3
 - React 18.2.0
 - bootstrap 5.3.0
+- axios 1.4.0
 - npm 9.5.0
 - webpack 5
 - babel

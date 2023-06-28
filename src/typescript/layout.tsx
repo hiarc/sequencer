@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Header } from './component/header';
+import { Header } from './component/header/header';
 import { Tracks } from './domain/track';
 import { TrackPanels } from './component/track-panels';
 import { Col, Container, Row } from 'react-bootstrap';
@@ -14,7 +14,7 @@ export const Layout: React.FunctionComponent<{}> = (props) => {
   }
   return (
     <Container fluid>
-      <Header />
+      <Header messages={messages}/>
       <Row>
         <Col lg="2">
           <TrackPanels tracks={tracks} />

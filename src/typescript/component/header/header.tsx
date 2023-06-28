@@ -3,8 +3,10 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import NoteOnMessage from '../../domain/message/channel/voice/note-on';
+import { play } from '../../repository/header-repository';
 
-export const Header: React.FunctionComponent<{}> = (props) => {
+export const Header: React.FunctionComponent<{messages: NoteOnMessage[]}> = (props) => {
   return (
     <Navbar bg="dark" variant="dark" expand="lg" className='header'>
       <Container>
@@ -30,7 +32,7 @@ export const Header: React.FunctionComponent<{}> = (props) => {
               <NavDropdown.Divider />
             </NavDropdown>
             <NavDropdown title="Player" id="header-dropdown-player">
-              <NavDropdown.Item href="#">Play</NavDropdown.Item>
+              <NavDropdown.Item href="#" onClick={() => play(props.messages)}>Play</NavDropdown.Item>
               <NavDropdown.Item href="#">Stop</NavDropdown.Item>
               <NavDropdown.Item href="#">Jump to</NavDropdown.Item>
             </NavDropdown>
