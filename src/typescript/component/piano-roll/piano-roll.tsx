@@ -1,5 +1,5 @@
 import * as React from 'react';
-import NoteOnMessage from '../domain/message/channel/voice/note-on';
+import NoteOnMessage from '../../domain/message/channel/voice/note-on';
 
 /** 平行線の間隔 */
 const X_LINE_SPACING = 15;

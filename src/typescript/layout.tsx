@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Header } from './component/header/header';
 import { Tracks } from './domain/track';
-import { TrackPanels } from './component/track-panels';
+import { TrackPanels } from './component/tracks/track-panels';
 import { Col, Container, Row } from 'react-bootstrap';
-import { PianoRoll } from './component/piano-roll';
+import { PianoRoll } from './component/piano-roll/piano-roll';
 import { Message } from './domain/message/interface';
 
 export const Layout: React.FunctionComponent<{}> = (props) => {
