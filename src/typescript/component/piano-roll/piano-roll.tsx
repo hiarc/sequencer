@@ -14,11 +14,11 @@ export const PianoRoll: React.FunctionComponent<{messages: NoteOnMessage[], addM
    * width は長方形の横幅、height は長方形の縦幅、x 及び y は長方形の左上の開始位置を表す。
    */
   const messageRects = props.messages.map(message => {
-    const width = message.duration.value;
+    const width = message.duration;
     const height = X_LINE_SPACING;
-    const x = message.startedOn.value;
+    const x = message.startedOn;
     // yは画面最上部を0にとるが、ノートナンバー（音程）は画面最下部を0とするため127を基準に逆転させる
-    const y = (127 - message.noteNumber.value) * X_LINE_SPACING;
+    const y = (127 - message.noteNumber) * X_LINE_SPACING;
     return <rect width={width} height={height} x={x} y={y} fill="gray" stroke="gray" key={`pianoroll-message-${y}-${x}`}/>
   });
 
