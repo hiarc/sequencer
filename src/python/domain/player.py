@@ -12,10 +12,9 @@ class Player:
                 NoteOnMessage(message.noteNumber, message.startedOn, message.duration)
             )
 
-    def play(self):
-        devices = mido.get_output_names()
-        print("Available Ports: " + ",".join(devices))
-        outport = mido.open_output("IACDriver BUS1")
+    def play(self, output_name: str):
+        # TODO: 例外処理
+        outport = mido.open_output(output_name)
 
         for message in self._messages:
             outport.send(message.toMIDIMessage())
