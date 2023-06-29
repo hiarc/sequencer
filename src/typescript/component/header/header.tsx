@@ -47,7 +47,7 @@ export const Header: React.FunctionComponent<{
               <NavDropdown.Divider />
             </NavDropdown>
             <NavDropdown title="Player" id="header-dropdown-player">
-              <NavDropdown.Item href="#" onClick={() => play(props.messages)}>Play</NavDropdown.Item>
+              <NavDropdown.Item href="#" onClick={() => play(props.messages, props.port)}>Play</NavDropdown.Item>
               <NavDropdown.Item href="#">Stop</NavDropdown.Item>
               <NavDropdown.Item href="#">Jump to</NavDropdown.Item>
             </NavDropdown>
