@@ -8,12 +8,20 @@ import { play } from '../../repository/header-repository';
 import { SettingsModal } from './settings-modal';
 
 export const Header: React.FunctionComponent<{
+  /** シーケンサーで入力したノートオンメッセージのリスト。 */
   messages: NoteOnMessage[], 
+
+  /** シーケンサーに設定済みのMIDI出力ポート。 */
   port: string, 
+
+  /** シーケンサーのMIDI出力ポートを設定する。 */
   setPort: (port: string) => void
+
 }> = (props) => {
 
+  /** 設定モーダルを表示するか。 */
   const [settingsIsShown, setSettingsShow] = React.useState(false);
+
   return (
     <Navbar bg="dark" variant="dark" expand="lg" className='header'>
       <Container>

@@ -4,15 +4,26 @@ import Modal from 'react-bootstrap/Modal';
 import { fetchPortNames } from '../../repository/header-repository';
 
 export const SettingsModal: React.FunctionComponent<{
+  /** モーダルを表示するか。 */
   show: boolean,
-  onHide: () => void,
-  port: string,
-  setPort: (port: string) => void
-}> = (props) => {
-  const [portNames, setPortNames] = React.useState([]);
 
+  /** モーダルを非表示にする。 */
+  onHide: () => void,
+
+  /** シーケンサーに設定済みのMIDI出力ポート。 */
+  port: string,
+
+  /** シーケンサーのMIDI出力ポートを設定する。 */
+  setPort: (port: string) => void
+
+}> = (props) => {
+  /**
+   * モーダルで選択可能なMIDI出力ポート。
+   * モーダル表示時のみ選択可能なポート名の取得を行う。
+   * 非表示にした時には選択肢を空にする。
+   */
+  const [portNames, setPortNames] = React.useState([]);
   useEffect(() => {
-    // ダイアログ表示時のみポートの取得を行う
     if(!props.show){
       return setPortNames([]);
     }
@@ -23,11 +34,15 @@ export const SettingsModal: React.FunctionComponent<{
 
   }, [props.show]);
 
+  /**
+   * モーダルで選択したMIDI出力ポート。
+   * モーダル表示前に選択していたポートが初期選択される。
+   * モーダルの決定ボタンをクリックした時に、シーケンサーに設定を反映する。
+   */
   const [selectedPort, setSelectedPort] = React.useState(props.port);
   const selectPort = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedPort(e.target.value);
   }
-
   const submit = () => {
     props.setPort(selectedPort);
     props.onHide();

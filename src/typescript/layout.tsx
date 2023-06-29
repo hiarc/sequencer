@@ -7,12 +7,20 @@ import { PianoRoll } from './component/piano-roll/piano-roll';
 import { Message } from './domain/message/interface';
 
 export const Layout: React.FunctionComponent<{}> = (props) => {
+  /** シーケンサーで入力したノートオンメッセージのリスト。 */
   const [messages, setMessages] = React.useState([]);
+
+  /** シーケンサーに設定済みのMIDI出力ポート。 */
   const [port, setPort] = React.useState('');
+
+  /** シーケンサーで設定したトラックのリスト。 */
   const tracks: Tracks = Tracks.default();
+
+  /** ノートオンメッセージのリストに要素を追加する。 */
   const addMessage = (message: Message) => {
     setMessages(messages.concat(message));
   }
+  
   return (
     <Container fluid>
       <Header messages={messages} port={port} setPort={(port: string) => setPort(port)}/>
