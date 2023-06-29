@@ -7,14 +7,15 @@ import { PianoRoll } from './component/piano-roll/piano-roll';
 import { Message } from './domain/message/interface';
 
 export const Layout: React.FunctionComponent<{}> = (props) => {
-  const tracks: Tracks = Tracks.default();
   const [messages, setMessages] = React.useState([]);
+  const [port, setPort] = React.useState('');
+  const tracks: Tracks = Tracks.default();
   const addMessage = (message: Message) => {
     setMessages(messages.concat(message));
   }
   return (
     <Container fluid>
-      <Header messages={messages}/>
+      <Header messages={messages} port={port} setPort={(port: string) => setPort(port)}/>
       <Row>
         <Col lg="2">
           <TrackPanels tracks={tracks} />

@@ -9,3 +9,8 @@ export const play = (messages: NoteOnMessage[]) => {
     .then((response) => console.log(response))
     .catch((error) => console.log(error));
 }
+
+export const fetchPortNames = () => {
+  // TODO: FQDNを共通化する
+  return axios.get('http://localhost:8000/v1.0/devices/output')
+}

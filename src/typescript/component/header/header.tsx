@@ -5,8 +5,15 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import NoteOnMessage from '../../domain/message/channel/voice/note-on';
 import { play } from '../../repository/header-repository';
+import { SettingsModal } from './settings-modal';
 
-export const Header: React.FunctionComponent<{messages: NoteOnMessage[]}> = (props) => {
+export const Header: React.FunctionComponent<{
+  messages: NoteOnMessage[], 
+  port: string, 
+  setPort: (port: string) => void
+}> = (props) => {
+
+  const [settingsIsShown, setSettingsShow] = React.useState(false);
   return (
     <Navbar bg="dark" variant="dark" expand="lg" className='header'>
       <Container>
@@ -36,10 +43,16 @@ export const Header: React.FunctionComponent<{messages: NoteOnMessage[]}> = (pro
               <NavDropdown.Item href="#">Stop</NavDropdown.Item>
               <NavDropdown.Item href="#">Jump to</NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link id="header-dropdown-settings">Settings</Nav.Link>
+            <Nav.Link id="header-dropdown-settings" onClick={() => setSettingsShow(true)}>Settings</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
+      <SettingsModal
+        show={settingsIsShown}
+        onHide={() => setSettingsShow(false)}
+        port={props.port}
+        setPort={(port) => props.setPort(port)}
+      />
     </Navbar>
   );
 }
