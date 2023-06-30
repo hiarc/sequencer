@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
 
 class Message(ABC):
@@ -10,4 +10,6 @@ class ChannelMessage(Message):
 
 
 class ChannelVoiceMessage(ChannelMessage):
-    pass
+    @abstractmethod
+    def toMIDIMessage(self, seek_time: int):
+        pass
