@@ -69,6 +69,7 @@ export const SettingsModal: React.FunctionComponent<{
           value={selectedPort}
           onChange={(e) => selectPort(e)}
         >
+          <option key={crypto.randomUUID()}>(Select Midi Output Port)</option>
           {portNames.map(port => <option value={port} key={crypto.randomUUID()}>{port}</option>)}
         </Form.Select>
         <Form.Text className="text-muted">
