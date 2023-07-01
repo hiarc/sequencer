@@ -16,9 +16,9 @@ export const PianoRoll: React.FunctionComponent<{messages: NoteOnMessage[], addM
    * width は長方形の横幅、height は長方形の縦幅、x 及び y は長方形の左上の開始位置を表す。
    */
   const messageRects = props.messages.map(message => {
-    const width = widthFromTick(message.duration);
+    const width = widthFromTick(message.tick);
     const height = X_LINE_SPACING;
-    const x = widthFromTick(message.startedOn);
+    const x = widthFromTick(message.startedAt);
     // yは画面最上部を0にとるが、ノートナンバー（音程）は画面最下部を0とするため最大値を基準にして逆転させる
     const y = (MAX_NOTE_NUMBER - message.noteNumber) * X_LINE_SPACING;
     return <rect width={width} height={height} x={x} y={y} fill="gray" stroke="gray" key={`pianoroll-message-${y}-${x}`}/>
@@ -53,10 +53,10 @@ export const PianoRoll: React.FunctionComponent<{messages: NoteOnMessage[], addM
     const noteNumber = MAX_NOTE_NUMBER - Math.floor(y / X_LINE_SPACING);
     // ノートの開始位置は8分音符でクォンタイズして入力する
     // TODO: クォンタイズする基準を変更できるようにする
-    const startX = tickFromWidth(Math.floor(x / Y_LINE_SPACING) * Y_LINE_SPACING);
+    const startedAt = tickFromWidth(Math.floor(x / Y_LINE_SPACING) * Y_LINE_SPACING);
     // ノートオンメッセージの発声の長さ。入力モードで選択している音の長さ（Rect要素の横幅）を基準にする
-    const duration = tickFromWidth(Y_LINE_SPACING);
-    return new NoteOnMessage(noteNumber, startX, duration);
+    const tick = tickFromWidth(Y_LINE_SPACING);
+    return new NoteOnMessage(noteNumber, startedAt, tick);
   }
 
   return (
@@ -103,8 +103,7 @@ for(let i = 1; i <= 60; i++){
  * @returns ノートオンメッセージのtick数
  */
 const tickFromWidth = (rectWidth: number) => {
-  // 選択中の音の長さ × (ticks per beat / 8分音符のrect要素の横幅)
-  // 参考：https://docs.google.com/spreadsheets/d/1YByx1GrFt2pb054rjzQbACoVX99rGNlkK2xb4Jd-i44/edit#gid=0
+  // 選択中の音の長さ × (480: ticks per beat / 48: 8分音符のrect要素の横幅)
   return rectWidth * 10;
 }
 
@@ -112,6 +111,6 @@ const tickFromWidth = (rectWidth: number) => {
  * ノートオンメッセージの時間表現を、シーケンサー上のX方向の距離にして返す。
  * @returns シーケンサー上のX方向の距離
  */
-const widthFromTick = (duration: number) => {
-  return duration / 10;
+const widthFromTick = (tick: number) => {
+  return tick / 10;
 }

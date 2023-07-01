@@ -18,17 +18,17 @@ export default class NoteOnMessage implements ChannelVoiceMessage {
   /**
    * ノートオンを開始する、シーケンサー上のタイミング。
    */
-  startedOn: number;
+  startedAt: number;
 
   /**
    * 発声時間。
    * ノートオンからノートオフまでの間とする。
    */
-  duration: number;
+  tick: number;
   
-  constructor(noteNumber: number = 60, startOn: number = 0, duration: number = 0){
+  constructor(noteNumber: number = 60, startOn: number = 0, tick: number = 0){
     this.noteNumber = noteNumber;
-    this.startedOn = startOn;
-    this.duration = duration;
+    this.startedAt = startOn;
+    this.tick = tick;
   }
 }

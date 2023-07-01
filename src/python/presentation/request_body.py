@@ -5,8 +5,8 @@ from domain.message import NoteOnMessage
 
 class NoteOnMessageRequest(BaseModel):
     note_number: int
-    started_on: int
-    duration: int
+    started_at: int
+    tick: int
 
     class Config:
         alias_generator = stringcase.camelcase
@@ -14,8 +14,8 @@ class NoteOnMessageRequest(BaseModel):
     def toDomain(self):
         return NoteOnMessage(
             self.note_number,
-            self.started_on,
-            self.duration,
+            self.started_at,
+            self.tick,
         )
 
 
