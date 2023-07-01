@@ -15,7 +15,12 @@ export const fetchPortNames = () => {
 }
 
 export const uploadFile = (file: File) => {
-  axios.post('http://localhost:8000/v1.0/upload', file)
+
+  const blob = new Blob([file], {type: "audio/midi"});
+  const formData = new FormData();
+  formData.set("file", blob, file.name);
+
+  axios.post('http://localhost:8000/v1.0/upload', formData)
     .then((response) => console.log(response))
     .catch((error) => console.log(error));
 }
