@@ -1,6 +1,5 @@
-from typing import Annotated
 from fastapi import APIRouter, Body
-from presentation.parameter import NoteOnMessageParameter
+from presentation.request_body import PlayRequest
 from domain.player import Player
 from domain.ports import Ports
 
@@ -13,8 +12,6 @@ async def port_names():
 
 
 @router.post("/v1.0/player")
-async def play(
-    messages: list[NoteOnMessageParameter], portName: Annotated[str, Body()]
-):
-    player = Player(messages)
-    player.play(portName)
+async def play(body: PlayRequest = Body()):
+    player = Player(body.message())
+    player.play(body.port_name)

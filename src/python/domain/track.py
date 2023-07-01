@@ -1,5 +1,5 @@
 import copy
-from mido import Message, MidiFile, MidiTrack
+from mido import MidiTrack
 from domain.message import NoteOnMessage
 from domain.message import IChannelVoiceMessage
 
@@ -20,7 +20,7 @@ class Track:
         # TODO: シーケンサーからノートオンメッセージに変換するコアドメインのため、ユニットテスト化してメンテナンス性を保つ
         seek_time: int = 0
         queue_messages: list[IChannelVoiceMessage] = copy.deepcopy(messages)
-        queue_messages.sort(key=lambda queue: queue._started_on)
+        queue_messages.sort(key=lambda queue: queue.started_on)
 
         while len(queue_messages) > 0:
             queue = queue_messages.pop(0)
@@ -28,12 +28,11 @@ class Track:
             fixed_message = queue.toMidoChannelVoiceMessage(seek_time)
             track.append(fixed_message)
 
-            # TODO: 後でPrivateからPublicにする。Pythonはカプセル化を推奨していないため
-            seek_time = queue._started_on
+            seek_time = queue.started_on
 
             if type(queue) is NoteOnMessage:
                 paired_note_off = queue.toNoteOffMessage()
                 queue_messages.append(paired_note_off)
-                queue_messages.sort(key=lambda queue: queue._started_on)
+                queue_messages.sort(key=lambda queue: queue.started_on)
 
         return track
