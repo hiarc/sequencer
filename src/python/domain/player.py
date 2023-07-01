@@ -1,9 +1,7 @@
 import copy
 from mido import Message, MidiFile, MidiTrack
 from presentation.parameter import NoteOnMessageParameter
-from domain.message.channel.voice.note_on import NoteOnMessage
-from domain.message.channel.voice.note_off import NoteOffMessage
-from domain.message.interface import ChannelVoiceMessage
+from domain.message import IChannelVoiceMessage, NoteOnMessage
 from domain.ports import Ports
 
 
@@ -21,14 +19,14 @@ class Player:
         # TODO: メッセージ生成のコアロジックのため、個別ドメインに移動する
         # TODO: 同様の理由でユニットテスト化してメンテナンス性を保つ
         seek_time: int = 0
-        queue_messages: list[ChannelVoiceMessage] = copy.deepcopy(self._messages)
+        queue_messages: list[IChannelVoiceMessage] = copy.deepcopy(self._messages)
         queue_messages.sort(key=lambda queue: queue._started_on)
         fixed_messages: list[Message] = []
 
         while len(queue_messages) > 0:
             queue = queue_messages.pop(0)
 
-            fixed_message = queue.toMIDIMessage(seek_time)
+            fixed_message = queue.toMidoIChannelVoiceMessage(seek_time)
             fixed_messages.append(fixed_message)
 
             # TODO: 後でPrivateからPublicにする。Pythonはカプセル化を推奨していないため
