@@ -1,4 +1,8 @@
-import { ChannelVoiceMessage } from "../../interface";
+export interface Message {}
+
+export interface ChannelMessage extends Message {}
+
+export interface ChannelVoiceMessage extends ChannelMessage {}
 
 /**
  * ノートオンメッセージを表すクラス。

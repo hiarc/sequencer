@@ -4,7 +4,7 @@ import { Tracks } from './domain/track';
 import { TrackPanels } from './component/tracks/track-panels';
 import { Col, Container, Row } from 'react-bootstrap';
 import { PianoRoll } from './component/piano-roll/piano-roll';
-import { Message } from './domain/message/interface';
+import { Message } from './domain/message';
 
 export const Layout: React.FunctionComponent<{}> = (props) => {
   /** シーケンサーで入力したノートオンメッセージのリスト。 */

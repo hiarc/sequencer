@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
-import { fetchPortNames } from '../../repository/header-repository';
+import { fetchPortNames } from '../../repository/repository';
 
 export const SettingsModal: React.FunctionComponent<{
   /** モーダルを表示するか。 */

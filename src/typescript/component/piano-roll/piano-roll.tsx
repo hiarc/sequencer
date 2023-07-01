@@ -1,5 +1,5 @@
 import * as React from 'react';
-import NoteOnMessage from '../../domain/message/channel/voice/note-on';
+import NoteOnMessage from '../../domain/message';
 
 /** 音程の最大値 */
 const MAX_NOTE_NUMBER = 127;

@@ -6,7 +6,7 @@ class IMessage(ABC):
     pass
 
 
-class IChannelMessage(Message):
+class IChannelMessage(IMessage):
     pass
 
 

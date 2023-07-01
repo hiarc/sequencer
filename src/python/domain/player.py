@@ -26,7 +26,7 @@ class Player:
         while len(queue_messages) > 0:
             queue = queue_messages.pop(0)
 
-            fixed_message = queue.toMidoIChannelVoiceMessage(seek_time)
+            fixed_message = queue.toMidoChannelVoiceMessage(seek_time)
             fixed_messages.append(fixed_message)
 
             # TODO: 後でPrivateからPublicにする。Pythonはカプセル化を推奨していないため

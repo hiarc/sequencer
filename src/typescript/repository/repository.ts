@@ -1,5 +1,5 @@
 import axios from "axios";
-import NoteOnMessage from "../domain/message/channel/voice/note-on";
+import NoteOnMessage from "../domain/message";
 
 export const play = (messages: NoteOnMessage[], portName: string) => {
   // TODO: FQDNを共通化する
