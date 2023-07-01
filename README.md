@@ -22,8 +22,8 @@
 3. ルートディレクトリで以下のコマンドを実行する
 
 ```shell
-# FastAPI、SQLAlchemy, Midoのインストール
-pip3 install "fastapi[all]" sqlalchemy mido
+# FastAPI、SQLAlchemy, stringcase, Midoのインストール
+pip3 install "fastapi[all]" stringcase sqlalchemy mido
 
 # DBサーバーの起動（localhost:33306）
 docker compose up -d db
