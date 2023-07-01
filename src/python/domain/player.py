@@ -1,11 +1,10 @@
 import copy
-import mido
+from mido import Message, MidiFile, MidiTrack
 from presentation.parameter import NoteOnMessageParameter
 from domain.message.channel.voice.note_on import NoteOnMessage
-
-from mido import Message, MidiFile, MidiTrack
 from domain.message.channel.voice.note_off import NoteOffMessage
 from domain.message.interface import ChannelVoiceMessage
+from domain.ports import Ports
 
 
 class Player:
@@ -17,7 +16,7 @@ class Player:
                 NoteOnMessage(message.noteNumber, message.startedOn, message.duration)
             )
 
-    def play(self, output_name: str):
+    def play(self, output_port_name: str):
         # シーケンサーの入力内容をMIDIノートオン、及びノートオフメッセージに変換する。
         # TODO: メッセージ生成のコアロジックのため、個別ドメインに移動する
         # TODO: 同様の理由でユニットテスト化してメンテナンス性を保つ
@@ -57,10 +56,9 @@ class Player:
         midi.tracks.append(sys_track)
         midi.tracks.append(track0)
 
-        # 出力ポートの取得
-        # TODO: 例外処理
-        outport = mido.open_output(output_name)
+        # 出力ポートのオープンと取得
+        port = Ports.open_output_port(output_port_name)
 
         # 再生
-        for msg in midi.play():
-            outport.send(msg)
+        for message in midi.play():
+            port.send(message)

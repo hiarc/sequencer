@@ -8,7 +8,7 @@ router = APIRouter()
 
 
 @router.get("/v1.0/devices/output")
-async def portNames():
+async def port_names():
     return Ports.get_output_ports()
 
 
