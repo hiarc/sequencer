@@ -4,15 +4,21 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import NoteOnMessage from '../../domain/message';
-import { play } from '../../repository/repository';
+import { play, selectFile, uploadFile } from '../../repository/repository';
 import { SettingsModal } from './settings-modal';
 
 export const Header: React.FunctionComponent<{
+  /** 現在開いているMIDIファイル。 */
+  file: File,
+
   /** シーケンサーで入力したノートオンメッセージのリスト。 */
   messages: NoteOnMessage[], 
 
   /** シーケンサーに設定済みのMIDI出力ポート。 */
   port: string, 
+
+  /** 指定したファイルを、現在開いているMIDIファイルとする。 */
+  setFile: (file: File) => void
 
   /** シーケンサーのMIDI出力ポートを設定する。 */
   setPort: (port: string) => void
@@ -21,6 +27,12 @@ export const Header: React.FunctionComponent<{
 
   /** 設定モーダルを表示するか。 */
   const [settingsIsShown, setSettingsShow] = React.useState(false);
+
+  const openFile = async () => {
+    const file = await selectFile();
+    props.setFile(file);
+    uploadFile(file);
+  }
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg" className='header'>
@@ -35,7 +47,7 @@ export const Header: React.FunctionComponent<{
               <NavDropdown.Item href="#">Save</NavDropdown.Item>
               <NavDropdown.Item href="#">Save as ...</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#">Open file</NavDropdown.Item>
+              <NavDropdown.Item href="#" onClick={() => openFile()}>Open file</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Edit" id="header-dropdown-edit">
               <NavDropdown.Item href="#">Undo</NavDropdown.Item>

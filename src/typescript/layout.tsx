@@ -7,6 +7,9 @@ import { PianoRoll } from './component/piano-roll/piano-roll';
 import { Message } from './domain/message';
 
 export const Layout: React.FunctionComponent<{}> = (props) => {
+  /** 現在開いているMIDIファイル。 */
+  const [file, setFile] = React.useState<File>();
+
   /** シーケンサーで入力したノートオンメッセージのリスト。 */
   const [messages, setMessages] = React.useState([]);
 
@@ -23,7 +26,13 @@ export const Layout: React.FunctionComponent<{}> = (props) => {
   
   return (
     <Container fluid>
-      <Header messages={messages} port={port} setPort={(port: string) => setPort(port)}/>
+      <Header
+        file={file}
+        messages={messages}
+        port={port}
+        setFile={(file: File) => setFile(file)}
+        setPort={(port: string) => setPort(port)}
+      />
       <Row>
         <Col lg="2">
           <TrackPanels tracks={tracks} />
