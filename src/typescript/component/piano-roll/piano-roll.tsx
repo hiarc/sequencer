@@ -1,10 +1,12 @@
 import * as React from 'react';
 import NoteOnMessage from '../../domain/message/channel/voice/note-on';
 
+/** 音程の最大値 */
+const MAX_NOTE_NUMBER = 127;
 /** 平行線の間隔 */
 const X_LINE_SPACING = 15;
 /** 垂直線の間隔 */
-const Y_LINE_SPACING = 50;
+const Y_LINE_SPACING = 48;
 
 export const PianoRoll: React.FunctionComponent<{messages: NoteOnMessage[], addMessage: Function}> = (props) => {
   /**
@@ -14,11 +16,11 @@ export const PianoRoll: React.FunctionComponent<{messages: NoteOnMessage[], addM
    * width は長方形の横幅、height は長方形の縦幅、x 及び y は長方形の左上の開始位置を表す。
    */
   const messageRects = props.messages.map(message => {
-    const width = message.duration;
+    const width = widthFromTick(message.duration);
     const height = X_LINE_SPACING;
-    const x = message.startedOn;
-    // yは画面最上部を0にとるが、ノートナンバー（音程）は画面最下部を0とするため127を基準に逆転させる
-    const y = (127 - message.noteNumber) * X_LINE_SPACING;
+    const x = widthFromTick(message.startedOn);
+    // yは画面最上部を0にとるが、ノートナンバー（音程）は画面最下部を0とするため最大値を基準にして逆転させる
+    const y = (MAX_NOTE_NUMBER - message.noteNumber) * X_LINE_SPACING;
     return <rect width={width} height={height} x={x} y={y} fill="gray" stroke="gray" key={`pianoroll-message-${y}-${x}`}/>
   });
 
@@ -47,14 +49,14 @@ export const PianoRoll: React.FunctionComponent<{messages: NoteOnMessage[], addM
    * @returns ノートオンメッセージ
    */
   const toNoteOnMessage = (x: number, y: number) => {
-    // window.pageYは画面最上部を0にとるが、ノートナンバー（音程）は画面最下部を0とするため127を基準に逆転させる
-    const noteNumber = 127 - Math.floor(y / X_LINE_SPACING);
+    // window.pageYは画面最上部を0にとるが、ノートナンバー（音程）は画面最下部を0とするため最大値を基準にして逆転させる
+    const noteNumber = MAX_NOTE_NUMBER - Math.floor(y / X_LINE_SPACING);
     // ノートの開始位置は8分音符でクォンタイズして入力する
     // TODO: クォンタイズする基準を変更できるようにする
-    const startX = Math.floor(x / Y_LINE_SPACING) * Y_LINE_SPACING;
-    // TODO: durationは8分音符で仮実装する
-    const message = new NoteOnMessage(noteNumber, startX, Y_LINE_SPACING);
-    return message;
+    const startX = tickFromWidth(Math.floor(x / Y_LINE_SPACING) * Y_LINE_SPACING);
+    // ノートオンメッセージの発声の長さ。入力モードで選択している音の長さ（Rect要素の横幅）を基準にする
+    const duration = tickFromWidth(Y_LINE_SPACING);
+    return new NoteOnMessage(noteNumber, startX, duration);
   }
 
   return (
@@ -77,7 +79,7 @@ export const PianoRoll: React.FunctionComponent<{messages: NoteOnMessage[], addM
  * 上記のように指定すると、起点（x1y1）から終点（x2y2）に線を引く。
  */
 const horizontalPaths = [];
-for(let i = 1; i <= 128; i++){
+for(let i = 1; i <= MAX_NOTE_NUMBER + 1; i++){
   const direction = `M 0 ${i * X_LINE_SPACING} L 1240 ${i * X_LINE_SPACING}`;
   const color = i % 12 === 0 ? "red" : "gray";
   const path = <path d={direction} stroke={color} strokeWidth={1} key={"pianoroll-horizon" + i}/>;
@@ -94,4 +96,22 @@ for(let i = 1; i <= 60; i++){
   const color = i % 8 === 0 ? "white" : "gray";
   const path = <path d={direction} stroke={color} strokeWidth={1} key={"pianoroll-vertical" + i}/>;
   verticalPaths.push(path);
+}
+
+/**
+ * シーケンサー上のX方向の距離を、ノートオンメッセージの発声の長さ(tick)に変換して返す。
+ * @returns ノートオンメッセージのtick数
+ */
+const tickFromWidth = (rectWidth: number) => {
+  // 選択中の音の長さ × (ticks per beat / 8分音符のrect要素の横幅)
+  // 参考：https://docs.google.com/spreadsheets/d/1YByx1GrFt2pb054rjzQbACoVX99rGNlkK2xb4Jd-i44/edit#gid=0
+  return rectWidth * 10;
+}
+
+/**
+ * ノートオンメッセージの時間表現を、シーケンサー上のX方向の距離にして返す。
+ * @returns シーケンサー上のX方向の距離
+ */
+const widthFromTick = (duration: number) => {
+  return duration / 10;
 }
