@@ -54,6 +54,10 @@ class NoteOffMessage(IChannelVoiceMessage):
 class MidoHelper:
     @staticmethod
     def is_mido_note_on_message(mido_message: Message):
+        """
+        Midoのノートオン・メッセージかどうかを返却する。
+        MIDIの規約上、ベロシティが0の場合はノートオフとして扱われるためベロシティによる判定を加えている。
+        """
         if mido_message.type != "note_on":
             return False
 
@@ -67,6 +71,10 @@ class MidoHelper:
 
     @staticmethod
     def is_mido_note_off_message(mido_message: Message):
+        """
+        Midoのノートオフ・メッセージかどうかを返却する。
+        MIDIの規約上、ベロシティが0の場合はノートオフとして扱われるためベロシティによる判定を加えている。
+        """
         if mido_message.type == "note_off":
             return True
 

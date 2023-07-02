@@ -1,7 +1,6 @@
 import copy
 from mido import MidiTrack, Message
-from domain.message import IChannelVoiceMessage, NoteOnMessage
-from domain.message import IMessage
+from domain.message import NoteOnMessage
 from domain.message import MidoHelper
 from logging import getLogger
 
@@ -17,11 +16,13 @@ class MidoTrackHelper:
 
     @staticmethod
     def mido_instrument_track(name: str, messages: list[NoteOnMessage]):
+        """
+        シーケンサーの入力内容をMIDIノートオン・及びノートオフメッセージに変換し、Midoのトラックとして返却する。
+        TODO: シーケンサーからノートオンメッセージに変換するコアドメインのため、ユニットテスト化してメンテナンス性を保つ
+        """
         mido_track = MidiTrack()
         mido_track.name = name
 
-        # シーケンサーの入力内容をMIDIノートオン、及びノートオフメッセージに変換する。
-        # TODO: シーケンサーからノートオンメッセージに変換するコアドメインのため、ユニットテスト化してメンテナンス性を保つ
         seek_time = 0
         queues = QueueMessage(copy.deepcopy(messages))
         queues.sort_by_started_at()
@@ -43,12 +44,15 @@ class MidoTrackHelper:
 
     @staticmethod
     def to_sequencer_messages(mido_track: MidiTrack[Message]):
+        """
+        Midoのトラックに含まれるMIDIノートオン・及びノートオフメッセージを、シーケンサーのメッセージオブジェクトに変換する。
+        TODO: コアドメインのため、ユニットテスト化してメンテナンス性を保つ
+        """
         seek_time = 0
-        mido_messages = copy.deepcopy(mido_track)
         queues = QueueMessage([])
         sequencer_messages = []
 
-        for mido_message in mido_messages:
+        for mido_message in mido_track:
             seek_time += mido_message.time
 
             if hasattr(mido_message, "time"):
