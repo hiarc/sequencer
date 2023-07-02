@@ -2,6 +2,7 @@ import copy
 from mido import MidiTrack, Message
 from domain.message import IChannelVoiceMessage, NoteOnMessage
 from domain.message import IMessage
+from domain.message import MidoHelper
 
 
 class Track:
@@ -41,27 +42,20 @@ class Track:
     def to_messages(track: MidiTrack[Message]):
         current_time: int = 0
         messages = copy.deepcopy(track)
-        queue_messages: list[IMessage] = []
+        queue_messages: list[NoteOnMessage] = []
         fixed_messages: list[IMessage] = []
 
         for message in messages:
             current_time += message.time
 
-            if (
-                message.type == "note_on"
-                and hasattr(message, "velocity")
-                and message.velocity != 0
-            ):
-                note_on = NoteOnMessage(message.note, current_time, 0)
+            if hasattr(message, "time"):
                 list(queue.add_tick(message.time) for queue in queue_messages)
+
+            if MidoHelper.is_mido_note_on_message(message):
+                note_on = NoteOnMessage(message.note, current_time, 0)
                 queue_messages.append(note_on)
 
-            if (
-                message.type == "note_off"
-                or message.type == "note_on"
-                and hasattr(message, "velocity")
-                and message.velocity == 0
-            ):
+            if MidoHelper.is_mido_note_off_message(message):
                 note_on = next(
                     (
                         note

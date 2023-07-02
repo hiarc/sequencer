@@ -49,3 +49,34 @@ class NoteOffMessage(IChannelVoiceMessage):
         # 直前のメッセージからの待機時間。シーケンス上の開始位置から、経過時間(seek_time)を引くことで算出する
         time = self.started_at - seek_time
         return Message("note_off", note=self.note_number, time=time)
+
+
+class MidoHelper:
+    @staticmethod
+    def is_mido_note_on_message(mido_message: Message):
+        if mido_message.type != "note_on":
+            return False
+
+        if not hasattr(mido_message, "velocity"):
+            return False
+
+        if mido_message.velocity == 0:
+            return False
+
+        return True
+
+    @staticmethod
+    def is_mido_note_off_message(mido_message: Message):
+        if mido_message.type == "note_off":
+            return True
+
+        if mido_message.type != "note_on":
+            return False
+
+        if not hasattr(mido_message, "velocity"):
+            return False
+
+        if mido_message.velocity == 0:
+            return True
+
+        return False
