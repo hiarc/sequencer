@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from mido import Message
-import stringcase
 
 
 class IMessage(ABC):
@@ -37,8 +36,8 @@ class NoteOnMessage(IChannelVoiceMessage):
         note_of_at = self.started_at + self.tick
         return NoteOffMessage(self.note_number, started_at=note_of_at)
 
-    class Config:
-        alias_generator = stringcase.camelcase
+    def add_tick(self, tick: int):
+        self.tick += tick
 
 
 class NoteOffMessage(IChannelVoiceMessage):

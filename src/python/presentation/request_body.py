@@ -9,13 +9,26 @@ class NoteOnMessageRequest(BaseModel):
     tick: int
 
     class Config:
+        """属性名の変換
+        入力(キャメル)と出力(スネーク)の相互変換をする
+        """
+
         alias_generator = stringcase.camelcase
+        allow_population_by_field_name = True
 
     def toDomain(self):
         return NoteOnMessage(
             self.note_number,
             self.started_at,
             self.tick,
+        )
+
+    @staticmethod
+    def fromDomain(message: NoteOnMessage):
+        return NoteOnMessageRequest(
+            note_number=message.note_number,
+            started_at=message.started_at,
+            tick=message.tick,
         )
 
 

@@ -12,3 +12,11 @@ class MIDIFile:
         self.midi: MidiFile = MidiFile(type=1)
         self.midi.tracks.append(sys_track)
         self.midi.tracks.append(track0)
+
+    @staticmethod
+    def file_to_obj(path: str):
+        midi = MidiFile(path)
+        # TODO: マルチトラックに対応する
+        # for track in midi.tracks:
+        #     messages = Track.to_messages(track)
+        return Track.to_messages(midi.tracks[0])

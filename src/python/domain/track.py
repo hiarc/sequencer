@@ -1,7 +1,7 @@
 import copy
-from mido import MidiTrack
-from domain.message import NoteOnMessage
-from domain.message import IChannelVoiceMessage
+from mido import MidiTrack, Message
+from domain.message import IChannelVoiceMessage, NoteOnMessage
+from domain.message import IMessage
 
 
 class Track:
@@ -36,3 +36,47 @@ class Track:
                 queue_messages.sort(key=lambda queue: queue.started_at)
 
         return track
+
+    @staticmethod
+    def to_messages(track: MidiTrack[Message]):
+        current_time: int = 0
+        messages = copy.deepcopy(track)
+        queue_messages: list[IMessage] = []
+        fixed_messages: list[IMessage] = []
+
+        for message in messages:
+            current_time += message.time
+
+            if (
+                message.type == "note_on"
+                and hasattr(message, "velocity")
+                and message.velocity != 0
+            ):
+                note_on = NoteOnMessage(message.note, current_time, 0)
+                list(queue.add_tick(message.time) for queue in queue_messages)
+                queue_messages.append(note_on)
+
+            if (
+                message.type == "note_off"
+                or message.type == "note_on"
+                and hasattr(message, "velocity")
+                and message.velocity == 0
+            ):
+                note_on = next(
+                    (
+                        note
+                        for note in queue_messages
+                        if note.note_number == message.note
+                    ),
+                    None,
+                )
+                if note_on is None:
+                    raise RuntimeError(
+                        "Paired NoteOnMessage is not found. note_number="
+                        + message.note_number
+                    )
+                queue_messages.remove(note_on)
+                note_on.add_tick(message.time)
+                fixed_messages.append(note_on)
+
+        return fixed_messages
