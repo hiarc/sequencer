@@ -7,10 +7,14 @@ const MAX_NOTE_NUMBER = 127;
 const X_LINE_SPACING = 15;
 /** 垂直線の間隔 */
 const Y_LINE_SPACING = 48;
-/** 垂直線の最大長 */
-const VERTICAL_PATHS_LENGTH = X_LINE_SPACING * (MAX_NOTE_NUMBER + 1);
+/** 平行線の初期幅 */
+const X_LINE_LENGTH = 1280;
+/** 垂直線の長さ */
+const Y_LINE_LENGTH = X_LINE_SPACING * (MAX_NOTE_NUMBER + 1);
 
 export const PianoRoll: React.FunctionComponent<{messages: NoteOnMessage[], addMessage: Function}> = (props) => {
+  var xLineLength = X_LINE_LENGTH;
+
   /**
    * ノートオンメッセージのrect要素。
    * 
@@ -21,6 +25,10 @@ export const PianoRoll: React.FunctionComponent<{messages: NoteOnMessage[], addM
     const width = widthFromTick(message.tick);
     const height = X_LINE_SPACING;
     const x = widthFromTick(message.startedAt);
+    // x座標＋発声の長さが画面右端に到達したら、水平スクロールを1小説分足す
+    if(xLineLength < x + Y_LINE_SPACING * 8){
+      xLineLength = x + Y_LINE_SPACING * 8;
+    }
     // yは画面最上部を0にとるが、ノートナンバー（音程）は画面最下部を0とするため最大値を基準にして逆転させる
     const y = (MAX_NOTE_NUMBER - message.noteNumber) * X_LINE_SPACING;
     return <rect width={width} height={height} x={x} y={y} fill="gray" stroke="gray" key={crypto.randomUUID()}/>
@@ -62,43 +70,49 @@ export const PianoRoll: React.FunctionComponent<{messages: NoteOnMessage[], addM
     return new NoteOnMessage(noteNumber, startedAt, 100, tick);
   }
 
+  /**
+   * 平行線を表すpath要素。
+   * 1オクターブ（12音）毎に赤線で区切る。
+   * 
+   * path の d は以下の構文を取り、SVG上で直線を表現する。
+   * d="M {x1} {y1} L {x2} {y2}"
+   * 上記のように指定すると、起点（x1y1）から終点（x2y2）に線を引く。
+   */
+  const horizontalPaths = () => {
+    const paths = [];
+    for(let i = 0; i <= MAX_NOTE_NUMBER + 1; i++){
+      const direction = `M 0 ${i * X_LINE_SPACING} L ${xLineLength} ${i * X_LINE_SPACING}`;
+      const color = (MAX_NOTE_NUMBER - i + 1) % 12 === 0 ? "red" : "gray";
+      const path = <path d={direction} stroke={color} strokeWidth={1} key={"pianoroll-horizon" + i}/>;
+      paths.push(path);
+    }
+    return paths;
+  }
+
+  /**
+   * 垂直線を表すpath要素。
+   * 8分音符毎に白線で区切る。
+   */
+  const verticalPaths = () => {
+    const paths = [];
+    for(let i = 1; i <= xLineLength / Y_LINE_SPACING; i++){
+      const direction = `M ${i * Y_LINE_SPACING} 0 L ${i * Y_LINE_SPACING} ${Y_LINE_LENGTH}`;
+      const color = i % 8 === 0 ? "white" : "gray";
+      const path = <path d={direction} stroke={color} strokeWidth={1} key={"pianoroll-vertical" + i}/>;
+      paths.push(path);
+    }
+    return paths;
+  }
+
   return (
     <div className="piano-roll">
-      <svg xmlns="http://www.w3.org/2000/svg" id="piano-roll" width="1240" height={VERTICAL_PATHS_LENGTH} onClick={addMessage}>
-      {horizontalPaths}
-      {verticalPaths}
+      <svg xmlns="http://www.w3.org/2000/svg" id="piano-roll" width={xLineLength} height={Y_LINE_LENGTH} onClick={addMessage}>
+      {horizontalPaths()}
+      {verticalPaths()}
       {messageRects}
       </svg>
     </div>
   );
-}
-
-/**
- * 平行線を表すpath要素。
- * 1オクターブ（12音）毎に赤線で区切る。
- * 
- * path の d は以下の構文を取り、SVG上で直線を表現する。
- * d="M {x1} {y1} L {x2} {y2}"
- * 上記のように指定すると、起点（x1y1）から終点（x2y2）に線を引く。
- */
-const horizontalPaths = [];
-for(let i = 0; i <= MAX_NOTE_NUMBER + 1; i++){
-  const direction = `M 0 ${i * X_LINE_SPACING} L 1240 ${i * X_LINE_SPACING}`;
-  const color = (MAX_NOTE_NUMBER - i + 1) % 12 === 0 ? "red" : "gray";
-  const path = <path d={direction} stroke={color} strokeWidth={1} key={"pianoroll-horizon" + i}/>;
-  horizontalPaths.push(path);
-}
-
-/**
- * 垂直線を表すpath要素。
- * 8分音符毎に白線で区切る。
- */
-const verticalPaths = [];
-for(let i = 1; i <= 60; i++){
-  const direction = `M ${i * Y_LINE_SPACING} 0 L ${i * Y_LINE_SPACING} ${VERTICAL_PATHS_LENGTH}`;
-  const color = i % 8 === 0 ? "white" : "gray";
-  const path = <path d={direction} stroke={color} strokeWidth={1} key={"pianoroll-vertical" + i}/>;
-  verticalPaths.push(path);
 }
 
 /**
