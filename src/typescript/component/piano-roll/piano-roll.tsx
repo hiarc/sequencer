@@ -8,7 +8,7 @@ const X_LINE_SPACING = 15;
 /** 垂直線の間隔 */
 const Y_LINE_SPACING = 48;
 /** 垂直線の最大長 */
-const verticalPathsLength = X_LINE_SPACING * (MAX_NOTE_NUMBER + 1);
+const VERTICAL_PATHS_LENGTH = X_LINE_SPACING * (MAX_NOTE_NUMBER + 1);
 
 export const PianoRoll: React.FunctionComponent<{messages: NoteOnMessage[], addMessage: Function}> = (props) => {
   /**
@@ -64,7 +64,7 @@ export const PianoRoll: React.FunctionComponent<{messages: NoteOnMessage[], addM
 
   return (
     <div className="piano-roll">
-      <svg xmlns="http://www.w3.org/2000/svg" id="piano-roll" width="1240" height={verticalPathsLength} onClick={addMessage}>
+      <svg xmlns="http://www.w3.org/2000/svg" id="piano-roll" width="1240" height={VERTICAL_PATHS_LENGTH} onClick={addMessage}>
       {horizontalPaths}
       {verticalPaths}
       {messageRects}
@@ -95,7 +95,7 @@ for(let i = 0; i <= MAX_NOTE_NUMBER + 1; i++){
  */
 const verticalPaths = [];
 for(let i = 1; i <= 60; i++){
-  const direction = `M ${i * Y_LINE_SPACING} 0 L ${i * Y_LINE_SPACING} ${verticalPathsLength}`;
+  const direction = `M ${i * Y_LINE_SPACING} 0 L ${i * Y_LINE_SPACING} ${VERTICAL_PATHS_LENGTH}`;
   const color = i % 8 === 0 ? "white" : "gray";
   const path = <path d={direction} stroke={color} strokeWidth={1} key={"pianoroll-vertical" + i}/>;
   verticalPaths.push(path);
