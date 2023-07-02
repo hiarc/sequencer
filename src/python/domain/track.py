@@ -59,7 +59,7 @@ class MidoTrackHelper:
                 queues.add_tick_all(mido_message.time)
 
             if MidoHelper.is_mido_note_on_message(mido_message):
-                note_on = NoteOnMessage(mido_message.note, seek_time, 0)
+                note_on = NoteOnMessage(mido_message.note, seek_time, mido_message.velocity, 0)
                 queues.append(note_on)
 
             if MidoHelper.is_mido_note_off_message(mido_message):

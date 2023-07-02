@@ -22,7 +22,7 @@ export const uploadFile = async (file: File) => {
     const response = await axios.post('http://localhost:8000/v1.0/upload', formData);
     return response.data.map(
       message => new NoteOnMessage(
-        message.noteNumber, message.startedAt, message.tick)
+        message.noteNumber, message.startedAt, message.velocity, message.tick)
     );
 }
 

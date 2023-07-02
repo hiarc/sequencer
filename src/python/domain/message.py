@@ -21,15 +21,18 @@ class IChannelVoiceMessage(IChannelMessage):
 
 
 class NoteOnMessage(IChannelVoiceMessage):
-    def __init__(self, note_number: int, started_at: int, tick: int):
+    def __init__(self, note_number: int, started_at: int, velocity: int, tick: int):
         self.note_number: int = note_number
         self.started_at: int = started_at
+        self.velocity: int = velocity
         self.tick: int = tick
 
     def toMidoChannelVoiceMessage(self, seek_time: int):
         # 直前のメッセージからの待機時間。シーケンス上の開始位置から、経過時間(seek_time)を引くことで算出する
         time = self.started_at - seek_time
-        return Message("note_on", note=self.note_number, time=time)
+        return Message(
+            "note_on", note=self.note_number, velocity=self.velocity, time=time
+        )
 
     def toNoteOffMessage(self):
         # ノートオフメッセージの開始位置は、ノートオンの開始位置＋発声時間

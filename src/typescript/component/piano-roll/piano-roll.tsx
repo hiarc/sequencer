@@ -56,7 +56,8 @@ export const PianoRoll: React.FunctionComponent<{messages: NoteOnMessage[], addM
     const startedAt = tickFromWidth(Math.floor(x / Y_LINE_SPACING) * Y_LINE_SPACING);
     // ノートオンメッセージの発声の長さ。入力モードで選択している音の長さ（Rect要素の横幅）を基準にする
     const tick = tickFromWidth(Y_LINE_SPACING);
-    return new NoteOnMessage(noteNumber, startedAt, tick);
+    // TODO: 編集時にベロシティを調整できるようにする
+    return new NoteOnMessage(noteNumber, startedAt, 100, tick);
   }
 
   return (

@@ -6,6 +6,7 @@ from domain.message import NoteOnMessage
 class NoteOnMessageRequest(BaseModel):
     note_number: int
     started_at: int
+    velocity: int
     tick: int
 
     class Config:
@@ -20,6 +21,7 @@ class NoteOnMessageRequest(BaseModel):
         return NoteOnMessage(
             self.note_number,
             self.started_at,
+            self.velocity,
             self.tick,
         )
 
@@ -28,6 +30,7 @@ class NoteOnMessageRequest(BaseModel):
         return NoteOnMessageRequest(
             note_number=message.note_number,
             started_at=message.started_at,
+            velocity=message.velocity,
             tick=message.tick,
         )
 
