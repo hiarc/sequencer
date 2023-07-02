@@ -63,7 +63,7 @@ class MidoTrackHelper:
                 queues.append(queue)
 
             if message.is_mido_note_off_message():
-                queue = queues.find_same_note_number(mido_message.note)
+                queue = queues.find_same_note_number(message.value.note)
                 if queue == None:
                     continue
 
