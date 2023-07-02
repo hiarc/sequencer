@@ -3,7 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import NoteOnMessage from '../../domain/message';
+import NoteOnMessage, { Message } from '../../domain/message';
 import { play, selectFile, uploadFile } from '../../repository/repository';
 import { SettingsModal } from './settings-modal';
 
@@ -18,10 +18,13 @@ export const Header: React.FunctionComponent<{
   port: string, 
 
   /** 指定したファイルを、現在開いているMIDIファイルとする。 */
-  setFile: (file: File) => void
+  setFile: (file: File) => void,
 
   /** シーケンサーのMIDI出力ポートを設定する。 */
-  setPort: (port: string) => void
+  setPort: (port: string) => void,
+
+  /** ノートオンメッセージをシーケンサーに設定する。 */
+  setMessage: (messages: NoteOnMessage[]) => void
 
 }> = (props) => {
 
@@ -30,8 +33,9 @@ export const Header: React.FunctionComponent<{
 
   const openFile = async () => {
     const file = await selectFile();
+    const messages = await uploadFile(file);
     props.setFile(file);
-    uploadFile(file);
+    props.setMessage(messages)
   }
 
   return (

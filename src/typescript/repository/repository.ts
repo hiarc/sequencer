@@ -14,15 +14,16 @@ export const fetchPortNames = () => {
   return axios.get('http://localhost:8000/v1.0/devices/output')
 }
 
-export const uploadFile = (file: File) => {
+export const uploadFile = async (file: File) => {
+    const blob = new Blob([file], {type: "audio/midi"});
+    const formData = new FormData();
+    formData.set("file", blob, file.name);
 
-  const blob = new Blob([file], {type: "audio/midi"});
-  const formData = new FormData();
-  formData.set("file", blob, file.name);
-
-  axios.post('http://localhost:8000/v1.0/upload', formData)
-    .then((response) => console.log(response))
-    .catch((error) => console.log(error));
+    const response = await axios.post('http://localhost:8000/v1.0/upload', formData);
+    return response.data.map(
+      message => new NoteOnMessage(
+        message.noteNumber, message.startedAt, message.tick)
+    );
 }
 
 export const selectFile = () => {

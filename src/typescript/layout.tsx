@@ -4,14 +4,14 @@ import { Tracks } from './domain/track';
 import { TrackPanels } from './component/tracks/track-panels';
 import { Col, Container, Row } from 'react-bootstrap';
 import { PianoRoll } from './component/piano-roll/piano-roll';
-import { Message } from './domain/message';
+import NoteOnMessage from './domain/message';
 
 export const Layout: React.FunctionComponent<{}> = (props) => {
   /** 現在開いているMIDIファイル。 */
   const [file, setFile] = React.useState<File>();
 
   /** シーケンサーで入力したノートオンメッセージのリスト。 */
-  const [messages, setMessages] = React.useState([]);
+  const [messages, setMessages] = React.useState<NoteOnMessage[]>([]);
 
   /** シーケンサーに設定済みのMIDI出力ポート。 */
   const [port, setPort] = React.useState('');
@@ -20,7 +20,7 @@ export const Layout: React.FunctionComponent<{}> = (props) => {
   const tracks: Tracks = Tracks.default();
 
   /** ノートオンメッセージのリストに要素を追加する。 */
-  const addMessage = (message: Message) => {
+  const addMessage = (message: NoteOnMessage) => {
     setMessages(messages.concat(message));
   }
   
@@ -32,13 +32,17 @@ export const Layout: React.FunctionComponent<{}> = (props) => {
         port={port}
         setFile={(file: File) => setFile(file)}
         setPort={(port: string) => setPort(port)}
+        setMessage={(messages: []) => setMessages(messages)}
       />
       <Row>
         <Col lg="2">
           <TrackPanels tracks={tracks} />
         </Col>
         <Col lg="10">
-          <PianoRoll messages={messages} addMessage={(message: Message) => addMessage(message)}/>
+          <PianoRoll
+            messages={messages}
+            addMessage={(message: NoteOnMessage) => addMessage(message)}
+          />
         </Col>
       </Row>
     </Container>
