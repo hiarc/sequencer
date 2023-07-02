@@ -70,7 +70,6 @@ class Track:
                         + message.note_number
                     )
                 queue_messages.remove(note_on)
-                note_on.add_tick(message.time)
                 fixed_messages.append(note_on)
 
         return fixed_messages
