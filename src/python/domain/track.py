@@ -1,7 +1,7 @@
 import copy
 from mido import MidiTrack, Message
 from domain.message import NoteOnMessage
-from domain.message import MidoHelper
+from domain.message import MidoMessageHelper
 from logging import getLogger
 
 logger = getLogger(__name__)
@@ -53,28 +53,30 @@ class MidoTrackHelper:
         sequencer_messages = []
 
         for mido_message in mido_track:
-            seek_time += mido_message.time
+            message = MidoMessageHelper(mido_message)
+            if message.has_attr("time"):
+                seek_time += message.value.time
+                queues.add_tick_all(message.value.time)
 
-            if hasattr(mido_message, "time"):
-                queues.add_tick_all(mido_message.time)
+            if message.is_mido_note_on_message():
+                queue = message.create_queue(seek_time)
+                queues.append(queue)
 
-            if MidoHelper.is_mido_note_on_message(mido_message):
-                note_on = NoteOnMessage(mido_message.note, seek_time, mido_message.velocity, 0)
-                queues.append(note_on)
-
-            if MidoHelper.is_mido_note_off_message(mido_message):
-                note_on = queues.find_same_note_number(mido_message.note)
-                if note_on == None:
+            if message.is_mido_note_off_message():
+                queue = queues.find_same_note_number(mido_message.note)
+                if queue == None:
                     continue
 
-                queues.remove(note_on)
-                sequencer_messages.append(note_on)
+                queues.remove(queue)
+                sequencer_messages.append(queue)
 
         return sequencer_messages
 
 
 class QueueMessage:
-    """変換待ちのシーケンサーMessageを扱うリスト。"""
+    """
+    変換待ちのシーケンサーMessageを扱うリスト。
+    """
 
     def __init__(self, queues: list):
         self.queues = queues

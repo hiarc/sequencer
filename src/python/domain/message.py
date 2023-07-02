@@ -54,40 +54,55 @@ class NoteOffMessage(IChannelVoiceMessage):
         return Message("note_off", note=self.note_number, time=time)
 
 
-class MidoHelper:
-    @staticmethod
-    def is_mido_note_on_message(mido_message: Message):
+class MidoMessageHelper:
+    """
+    Midoのメッセージをラップして扱うクラス。
+    """
+
+    def __init__(self, mido_message: Message) -> None:
+        self.value = mido_message
+
+    def has_attr(self, name: str):
+        return hasattr(self.value, "time")
+
+    def is_mido_note_on_message(self):
         """
         Midoのノートオン・メッセージかどうかを返却する。
         MIDIの規約上、ベロシティが0の場合はノートオフとして扱われるためベロシティによる判定を加えている。
         """
-        if mido_message.type != "note_on":
+        if self.value.type != "note_on":
             return False
 
-        if not hasattr(mido_message, "velocity"):
+        if not hasattr(self.value, "velocity"):
             return False
 
-        if mido_message.velocity == 0:
+        if self.value.velocity == 0:
             return False
 
         return True
 
-    @staticmethod
-    def is_mido_note_off_message(mido_message: Message):
+    def is_mido_note_off_message(self):
         """
         Midoのノートオフ・メッセージかどうかを返却する。
         MIDIの規約上、ベロシティが0の場合はノートオフとして扱われるためベロシティによる判定を加えている。
         """
-        if mido_message.type == "note_off":
+        if self.value.type == "note_off":
             return True
 
-        if mido_message.type != "note_on":
+        if self.value.type != "note_on":
             return False
 
-        if not hasattr(mido_message, "velocity"):
+        if not hasattr(self.value, "velocity"):
             return False
 
-        if mido_message.velocity == 0:
+        if self.value.velocity == 0:
             return True
 
         return False
+
+    def create_queue(self, seek_time: int):
+        """
+        変換待ちのノートオンメッセージを生成する。
+        発声時間（tick）の初期値は0とし、ノートオフメッセージが見つかるまで加算する。
+        """
+        return NoteOnMessage(self.value.note, seek_time, self.value.velocity, 0)
