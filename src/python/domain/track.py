@@ -43,19 +43,19 @@ class MidoTrackHelper:
 
     @staticmethod
     def to_sequencer_messages(mido_track: MidiTrack[Message]):
-        current_time = 0
+        seek_time = 0
         mido_messages = copy.deepcopy(mido_track)
         queues = QueueMessage([])
         sequencer_messages = []
 
         for mido_message in mido_messages:
-            current_time += mido_message.time
+            seek_time += mido_message.time
 
             if hasattr(mido_message, "time"):
                 queues.add_tick_all(mido_message.time)
 
             if MidoHelper.is_mido_note_on_message(mido_message):
-                note_on = NoteOnMessage(mido_message.note, current_time, 0)
+                note_on = NoteOnMessage(mido_message.note, seek_time, 0)
                 queues.append(note_on)
 
             if MidoHelper.is_mido_note_off_message(mido_message):
