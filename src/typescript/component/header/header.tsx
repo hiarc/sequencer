@@ -3,9 +3,10 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import NoteOnMessage, { Message } from '../../domain/message';
-import { play, selectFile, uploadFile } from '../../repository/repository';
+import NoteOnMessage from '../../domain/message';
+import { play, saveAndDownload, selectFile, uploadFile } from '../../repository/repository';
 import { SettingsModal } from './settings-modal';
+import { nowDateTime } from '../../common/date-utils';
 
 export const Header: React.FunctionComponent<{
   /** 現在開いているMIDIファイル。 */
@@ -38,6 +39,11 @@ export const Header: React.FunctionComponent<{
     props.setMessage(messages)
   }
 
+  const saveAndDownloadFile = () => {
+    const filename = `new_file_${nowDateTime()}.mid`;
+    saveAndDownload(props.messages, filename);
+  }
+  
   return (
     <Navbar bg="dark" variant="dark" expand="lg" className='header'>
       <Container>
@@ -48,8 +54,7 @@ export const Header: React.FunctionComponent<{
             <NavDropdown title="File" id="header-dropdown-file">
               <NavDropdown.Item href="#">New file</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#">Save</NavDropdown.Item>
-              <NavDropdown.Item href="#">Save as ...</NavDropdown.Item>
+              <NavDropdown.Item href="#" onClick={() => saveAndDownloadFile()}>Save</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#" onClick={() => openFile()}>Open file</NavDropdown.Item>
             </NavDropdown>

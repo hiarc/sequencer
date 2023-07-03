@@ -1,8 +1,28 @@
-import axios from "axios";
+import axios, { ResponseType } from "axios";
 import NoteOnMessage from "../domain/message";
 
+// TODO: FQDNを共通化する
+
+export const saveAndDownload = (messages: NoteOnMessage[], filename: string) => {
+  const data = { messages: messages, filename: filename }; 
+  const option = {
+    responseType: "blob" as ResponseType,
+  };
+
+  axios.post('http://localhost:8000/v1.0/save', data, option).then(response => {
+    const blob = new Blob([response.data], { type: response.data.type });
+
+    const anchor = document.createElement("a");
+    anchor.href = window.URL.createObjectURL(blob);
+    anchor.setAttribute("download", filename);
+    anchor.click();
+
+  }).catch(error => {
+    alert(error);
+  })
+}
+
 export const play = (messages: NoteOnMessage[], portName: string) => {
-  // TODO: FQDNを共通化する
   const data = {messages: messages, portName: portName}; 
   axios.post('http://localhost:8000/v1.0/player', data)
     .then((response) => console.log(response))
@@ -10,7 +30,6 @@ export const play = (messages: NoteOnMessage[], portName: string) => {
 }
 
 export const fetchPortNames = () => {
-  // TODO: FQDNを共通化する
   return axios.get('http://localhost:8000/v1.0/devices/output')
 }
 

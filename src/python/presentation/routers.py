@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Body, UploadFile
-from presentation.request_body import PlayRequest, NoteOnMessageRequest
+from fastapi.responses import FileResponse
+from presentation.request_body import SaveRequest, PlayRequest, NoteOnMessageRequest
 from domain.player import Player
 from domain.ports import Ports
 from domain.midi_file import MIDIFile
@@ -14,9 +15,16 @@ async def port_names():
     return Ports.get_output_ports()
 
 
+@router.post("/v1.0/save")
+async def save(body: SaveRequest = Body()):
+    midi = MIDIFile(body.toDomain()).midi
+    repository.save(midi, body.filename)
+    return FileResponse(body.filename)
+
+
 @router.post("/v1.0/upload")
 async def openFile(file: UploadFile) -> list[NoteOnMessageRequest]:
-    repository.save(file.file, file.filename)
+    repository.upload(file.file, file.filename)
     messages = MIDIFile.file_to_obj(file.filename)
     # TODO: 曲のメタ情報（テンポ）やトラック情報を返す
     # TODO: マルチトラックに対応する
@@ -25,5 +33,5 @@ async def openFile(file: UploadFile) -> list[NoteOnMessageRequest]:
 
 @router.post("/v1.0/player")
 async def play(body: PlayRequest = Body()):
-    player = Player(body.message())
+    player = Player(body.toDomain())
     player.play(body.port_name)

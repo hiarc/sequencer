@@ -42,5 +42,16 @@ class PlayRequest(BaseModel):
     class Config:
         alias_generator = stringcase.camelcase
 
-    def message(self):
+    def toDomain(self):
+        return list(message.toDomain() for message in self.messages)
+
+
+class SaveRequest(BaseModel):
+    messages: list[NoteOnMessageRequest]
+    filename: str
+
+    class Config:
+        alias_generator = stringcase.camelcase
+
+    def toDomain(self):
         return list(message.toDomain() for message in self.messages)
