@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { MAX_NOTE_NUMBER, X_LINE_SPACING, PIANO_ROLLE_HEIGHT, Y_LINE_SPACING } from './piano-roll';
+import { MAX_NOTE_NUMBER, X_LINE_SPACING, PIANO_ROLLE_HEIGHT } from './piano-roll';
 
 /** 鍵盤の横幅 */
 const CONTAINER_WIDTH = 50;
@@ -20,9 +20,10 @@ const BLACK_KEY_COLOR_STROKE = "000000";
 const BLACK_KEY_COLOR_FILL = "202020";
 
 export const PianoKey: React.FunctionComponent<{}> = (props) => {
+
   return (
-    <div className="main-piano-key">
-      <svg xmlns="http://www.w3.org/2000/svg" id="piano-key" width="50px" height={PIANO_ROLLE_HEIGHT}>
+    <div className="main-piano-key" id="piano-key">
+      <svg xmlns="http://www.w3.org/2000/svg" width="50px" height={PIANO_ROLLE_HEIGHT}>
       {whiteKeyElements()}
       {blackKeyElements()}
       </svg>

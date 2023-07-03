@@ -28,7 +28,24 @@ const Y_LINE_COLOR = "101010"
 const Y_MEASURE_LINE_COLOR = X_OCTAVE_LINE_COLOR
 
 
-export const PianoRoll: React.FunctionComponent<{messages: NoteOnMessage[], addMessage: Function}> = (props) => {
+export const PianoRoll: React.FunctionComponent<{
+  messages: NoteOnMessage[], 
+  addMessage: (message: NoteOnMessage) => void
+}> = (props) => {
+
+  const pianoRollElement = React.useRef(null);
+
+  React.useEffect(() => {
+    pianoRollElement.current.scrollTop = PIANO_ROLLE_HEIGHT / 2;
+  }, []);
+
+  const onScroll = (e) => {
+    const pianoKey = document.getElementById("piano-key");
+    if(!pianoKey){
+      return;
+    }
+    pianoKey.scrollTop = e.target.scrollTop;
+  }
   var pianoRollWidth = PIANO_ROLL_WIDTH;
 
   /**
@@ -138,7 +155,7 @@ export const PianoRoll: React.FunctionComponent<{messages: NoteOnMessage[], addM
   }
 
   return (
-    <div className="main-piano-roll">
+    <div className="main-piano-roll" onScroll={(e) => onScroll(e)} ref={pianoRollElement}>
       <svg xmlns="http://www.w3.org/2000/svg" id="piano-roll" width={pianoRollWidth} height={PIANO_ROLLE_HEIGHT} onClick={addMessage}>
         {xRollElements()}
         {xLineElements()}

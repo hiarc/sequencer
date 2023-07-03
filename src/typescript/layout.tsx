@@ -3,7 +3,7 @@ import { Header } from './component/header/header';
 import { Tracks } from './domain/track';
 import { TrackPanels } from './component/tracks/track-panels';
 import { Container } from 'react-bootstrap';
-import { PianoRoll } from './component/piano-roll/piano-roll';
+import { PIANO_ROLLE_HEIGHT, PianoRoll } from './component/piano-roll/piano-roll';
 import NoteOnMessage from './domain/message';
 import { PianoKey } from './component/piano-roll/piano-key';
 
