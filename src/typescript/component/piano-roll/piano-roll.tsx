@@ -33,12 +33,13 @@ export const PianoRoll: React.FunctionComponent<{
   addMessage: (message: NoteOnMessage) => void
 }> = (props) => {
 
-  const pianoRollElement = React.useRef(null);
-
+  // 読み込み時に画面中央部までスクロールする。
+  const pianoRollElement = React.useRef(null)
   React.useEffect(() => {
     pianoRollElement.current.scrollTop = PIANO_ROLLE_HEIGHT / 2;
   }, []);
 
+  // ピアノロールを縦スクロールしたら白鍵・黒鍵のスクロールを追従させる。
   const onScroll = (e) => {
     const pianoKey = document.getElementById("piano-key");
     if(!pianoKey){
@@ -122,10 +123,6 @@ export const PianoRoll: React.FunctionComponent<{
   /**
    * 入力領域の音程を表す平行線のSVG要素。
    * 音程ごと、1オクターブごとに色分けして区切る。
-   * 
-   * path の d は以下の構文を取り、SVG上で直線を表現する。
-   * d="M {x1} {y1} L {x2} {y2}"
-   * 上記のように指定すると、起点（x1y1）から終点（x2y2）に線を引く。
    */
     const xLineElements = () => {
       const elements = [];
