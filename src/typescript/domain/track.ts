@@ -1,44 +1,69 @@
-export default class Track {
-  private no: number;
-  private name: string;
-  private instrumentId: number;
-  private sequenseId: number;
+import { Message } from "./message";
 
-  constructor(no: number){
-    this.no = no;
-    this.name = `track${no}`;
+export default class Track {
+  no: number;
+  name: string;
+  instrumentId: number;
+  messages: Message[] = [];
+
+  static systemTrack(): Track{
+    const track = new Track();
+    track.no = 0;
+    track.name = `System Track`;
+
+    return track;
   }
-  public get getNo(): number{
-    return this.no;
+
+  static instrumentalTrack(no: number): Track{
+    if(no === 0){
+      throw new Error("Track No.0 is used as System Track.");
+    }
+
+    const track = new Track();
+    track.no = no;
+    track.name = `Track${no}`;
+
+    return track;
   }
-  public get getName(): string{
-    return this.name;
+
+  addMessage(message: Message): void {
+    this.messages.push(message);
   }
+
 }
 
 export class Tracks {
-  private tracks: Track[];
+  tracks: Track[];
+
   constructor(tracks: Track[]){
     this.tracks = tracks;
   }
-  public static empty(): Tracks {
+
+  static empty(): Tracks {
     return new Tracks([]);
   }
-  public static default(): Tracks {
-    let tracks = this.empty();
+
+  static default(): Tracks {
+    const tracks = [];
+
     for(let idx = 1; idx <= 16; idx++){
-      tracks.add(tracks.size + 1);
+      const track = Track.instrumentalTrack(tracks.length + 1);
+      tracks.push(track);
     }
-    return tracks;
+
+    return new Tracks(tracks);
   }
-  public add(no: number): void {
-    const track = new Track(no);
+
+  add(no: number): void {
+    const track = Track.instrumentalTrack(no);
     this.tracks.push(track);
   }
-  public get asList(): Track[]{
-    return this.tracks;
-  }
-  public get size(): number {
-    return this.tracks.length;
+
+  select(no: number): Track {
+    if(no > this.tracks.length){
+      throw new Error("OutOfRangeError.");
+    }
+
+    return this.tracks[no];
   }
 }
