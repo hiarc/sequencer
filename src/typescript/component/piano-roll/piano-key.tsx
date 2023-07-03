@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { MAX_NOTE_NUMBER, X_LINE_SPACING, Y_LINE_LENGTH, Y_LINE_SPACING } from './piano-roll';
+import { MAX_NOTE_NUMBER, X_LINE_SPACING, PIANO_ROLLE_HEIGHT, Y_LINE_SPACING } from './piano-roll';
 
 /** 鍵盤の横幅 */
 const CONTAINER_WIDTH = 50;
@@ -22,7 +22,7 @@ const BLACK_KEY_COLOR_FILL = "202020";
 export const PianoKey: React.FunctionComponent<{}> = (props) => {
   return (
     <div className="main-piano-key">
-      <svg xmlns="http://www.w3.org/2000/svg" id="piano-key" width="50px" height={Y_LINE_LENGTH}>
+      <svg xmlns="http://www.w3.org/2000/svg" id="piano-key" width="50px" height={PIANO_ROLLE_HEIGHT}>
       {whiteKeyElements()}
       {blackKeyElements()}
       </svg>
@@ -56,15 +56,16 @@ const whiteKeyElements = () => {
 }
 
 /**
- * 黒鍵を表すrect要素。
+ * 黒鍵を表すSVG要素。
  */
 const blackKeyElements = () => {
   const rects = [];
   for(let i = 0; i <= MAX_NOTE_NUMBER + 1; i++){
     if([1, 4, 6, 9, 11].some(note => i % 12 === note)){
-      const width = CONTAINER_WIDTH * 0.6; // 幅は白鍵の60%にする
-      const height = X_LINE_SPACING - (2 * 2); // 黒鍵の上下2つのマージンは、それぞれ2ポイントとずつとする
-      const y = 3 + i * X_LINE_SPACING;
+      const width = CONTAINER_WIDTH * 0.65; // 幅は白鍵の65%にする
+      const vMergin = 4; // 黒鍵の上下2つのマージンは、それぞれ4ポイントとずつとする
+      const height = X_LINE_SPACING - (vMergin * 2); 
+      const y = vMergin + i * X_LINE_SPACING;
       const rect = <rect width={width} height={height} x={0} y={y} fill={`#${BLACK_KEY_COLOR_FILL}`} stroke={`#${BLACK_KEY_COLOR_STROKE}`} key={crypto.randomUUID()}/>
       rects.push(rect);
     }

@@ -3,17 +3,33 @@ import NoteOnMessage from '../../domain/message';
 
 /** 音程の最大値 */
 export const MAX_NOTE_NUMBER = 127;
-/** 平行線の間隔 */
+/** 1音程を表す水平線の縦方向の間隔 */
 export const X_LINE_SPACING = 15;
-/** 垂直線の間隔 */
+/** 8分音符を表す垂直線の水平方向の間隔 */
 export const Y_LINE_SPACING = 48;
-/** 平行線の初期幅 */
-export const X_LINE_LENGTH = 1280;
-/** 垂直線の長さ */
-export const Y_LINE_LENGTH = X_LINE_SPACING * (MAX_NOTE_NUMBER + 1);
+/** ピアノロール全体の横幅。初期幅は1280 */
+export const PIANO_ROLL_WIDTH = 1280;
+/** ピアノロール全体の縦幅 */
+export const PIANO_ROLLE_HEIGHT = X_LINE_SPACING * (MAX_NOTE_NUMBER + 1);
+
+/** ノートオンメッセージのカラーコード */
+const NOTE_ON_COLOR = "70F050";
+/** 白鍵の入力領域の内側のカラーコード */
+const X_WHITE_KEY_COLOR = "202020";
+/** 黒鍵の入力領域の内側のカラーコード */
+const X_BLACK_KEY_COLOR = "1A1A1A";
+/** 1音程を表す水平線のカラーコード */
+const X_LINE_COLOR = X_BLACK_KEY_COLOR
+/** 1オクターブを表す水平線のカラーコード */
+const X_OCTAVE_LINE_COLOR = "303030"
+/** 8分音符を表す垂直線のカラーコード */
+const Y_LINE_COLOR = "101010"
+/** 1小節を表す垂直線のカラーコード */
+const Y_MEASURE_LINE_COLOR = X_OCTAVE_LINE_COLOR
+
 
 export const PianoRoll: React.FunctionComponent<{messages: NoteOnMessage[], addMessage: Function}> = (props) => {
-  var xLineLength = X_LINE_LENGTH;
+  var pianoRollWidth = PIANO_ROLL_WIDTH;
 
   /**
    * ノートオンメッセージのrect要素。
@@ -26,12 +42,12 @@ export const PianoRoll: React.FunctionComponent<{messages: NoteOnMessage[], addM
     const height = X_LINE_SPACING;
     const x = widthFromTick(message.startedAt);
     // x座標＋発声の長さが画面右端に到達したら、水平スクロールを1小説分足す
-    if(xLineLength < x + Y_LINE_SPACING * 8){
-      xLineLength = x + Y_LINE_SPACING * 8;
+    if(pianoRollWidth < x + Y_LINE_SPACING * 8){
+      pianoRollWidth = x + Y_LINE_SPACING * 8;
     }
     // yは画面最上部を0にとるが、ノートナンバー（音程）は画面最下部を0とするため最大値を基準にして逆転させる
     const y = (MAX_NOTE_NUMBER - message.noteNumber) * X_LINE_SPACING;
-    return <rect width={width} height={height} x={x} y={y} fill="gray" stroke="gray" key={crypto.randomUUID()}/>
+    return <rect width={width} height={height} x={x} y={y} fill={`#${NOTE_ON_COLOR}`} stroke={`#${NOTE_ON_COLOR}`} key={crypto.randomUUID()}/>
   });
 
   /**
@@ -71,45 +87,62 @@ export const PianoRoll: React.FunctionComponent<{messages: NoteOnMessage[], addM
   }
 
   /**
-   * 平行線を表すpath要素。
-   * 1オクターブ（12音）毎に赤線で区切る。
+   * ピアノロールの水平方向の入力領域を表すSVG要素。
+   * 入力の目安になるように、音程ごと（白鍵・黒鍵）に色を塗り分ける。
+   */
+  const xRollElements = () => {
+    var totalY = 0;
+    const elements = [];
+    for(let i = 1; i <= MAX_NOTE_NUMBER + 1; i++){
+      const fill = [8, 9, 11, 1, 3, 4, 6].some(number => i % 12 === number) ? X_WHITE_KEY_COLOR : X_BLACK_KEY_COLOR;
+      const rect = <rect width={pianoRollWidth} height={X_LINE_SPACING} x={0} y={totalY} fill={`#${fill}`} key={crypto.randomUUID()}/>
+      elements.push(rect);
+      totalY += X_LINE_SPACING;
+    }
+    return elements;
+  }
+
+  /**
+   * 入力領域の音程を表す平行線のSVG要素。
+   * 音程ごと、1オクターブごとに色分けして区切る。
    * 
    * path の d は以下の構文を取り、SVG上で直線を表現する。
    * d="M {x1} {y1} L {x2} {y2}"
    * 上記のように指定すると、起点（x1y1）から終点（x2y2）に線を引く。
    */
-  const horizontalPaths = () => {
-    const paths = [];
-    for(let i = 0; i <= MAX_NOTE_NUMBER + 1; i++){
-      const direction = `M 0 ${i * X_LINE_SPACING} L ${xLineLength} ${i * X_LINE_SPACING}`;
-      const color = (MAX_NOTE_NUMBER - i + 1) % 12 === 0 ? "red" : "gray";
-      const path = <path d={direction} stroke={color} strokeWidth={1} key={"pianoroll-horizon" + i}/>;
-      paths.push(path);
+    const xLineElements = () => {
+      const elements = [];
+      for(let i = 0; i <= MAX_NOTE_NUMBER + 1; i++){
+        const stroke = i % 12 === 8 ? X_OCTAVE_LINE_COLOR : X_LINE_COLOR;
+        const direction = `M 0 ${i * X_LINE_SPACING} L ${pianoRollWidth} ${i * X_LINE_SPACING}`;
+        const path = <path d={direction} stroke={`#${stroke}`} strokeWidth={1} key={crypto.randomUUID()}/>;
+        elements.push(path);
+      }
+      return elements;
     }
-    return paths;
-  }
 
   /**
-   * 垂直線を表すpath要素。
-   * 8分音符毎に白線で区切る。
+   * 音符の長さを表す垂直線のSVG要素。
+   * 8分音符ごと、1小節ごとに色分けして区切る。
    */
-  const verticalPaths = () => {
-    const paths = [];
-    for(let i = 1; i <= xLineLength / Y_LINE_SPACING; i++){
-      const direction = `M ${i * Y_LINE_SPACING} 0 L ${i * Y_LINE_SPACING} ${Y_LINE_LENGTH}`;
-      const color = i % 8 === 0 ? "white" : "gray";
-      const path = <path d={direction} stroke={color} strokeWidth={1} key={"pianoroll-vertical" + i}/>;
-      paths.push(path);
+  const yLineElements = () => {
+    const elements = [];
+    for(let i = 1; i <= pianoRollWidth / Y_LINE_SPACING; i++){
+      const direction = `M ${i * Y_LINE_SPACING} 0 L ${i * Y_LINE_SPACING} ${PIANO_ROLLE_HEIGHT}`;
+      const color = i % 8 === 0 ? Y_MEASURE_LINE_COLOR : Y_LINE_COLOR;
+      const path = <path d={direction} stroke={`#${color}`} strokeWidth={1} key={crypto.randomUUID()}/>;
+      elements.push(path);
     }
-    return paths;
+    return elements;
   }
 
   return (
     <div className="main-piano-roll">
-      <svg xmlns="http://www.w3.org/2000/svg" id="piano-roll" width={xLineLength} height={Y_LINE_LENGTH} onClick={addMessage}>
-      {horizontalPaths()}
-      {verticalPaths()}
-      {messageRects}
+      <svg xmlns="http://www.w3.org/2000/svg" id="piano-roll" width={pianoRollWidth} height={PIANO_ROLLE_HEIGHT} onClick={addMessage}>
+        {xRollElements()}
+        {xLineElements()}
+        {yLineElements()}
+        {messageRects}
       </svg>
     </div>
   );
