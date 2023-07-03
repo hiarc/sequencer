@@ -2,9 +2,10 @@ import * as React from 'react';
 import { Header } from './component/header/header';
 import { Tracks } from './domain/track';
 import { TrackPanels } from './component/tracks/track-panels';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { PianoRoll } from './component/piano-roll/piano-roll';
 import NoteOnMessage from './domain/message';
+import { PianoKey } from './component/piano-roll/piano-key';
 
 export const Layout: React.FunctionComponent<{}> = (props) => {
   /** 現在開いているMIDIファイル。 */
@@ -34,17 +35,14 @@ export const Layout: React.FunctionComponent<{}> = (props) => {
         setPort={(port: string) => setPort(port)}
         setMessage={(messages: []) => setMessages(messages)}
       />
-      <Row>
-        <Col lg="2">
-          <TrackPanels tracks={tracks} />
-        </Col>
-        <Col lg="10">
-          <PianoRoll
-            messages={messages}
-            addMessage={(message: NoteOnMessage) => addMessage(message)}
-          />
-        </Col>
-      </Row>
+      <main className='main'>
+        <TrackPanels tracks={tracks} />
+        <PianoKey />
+        <PianoRoll
+          messages={messages}
+          addMessage={(message: NoteOnMessage) => addMessage(message)}
+        />
+      </main>
     </Container>
   );
 }

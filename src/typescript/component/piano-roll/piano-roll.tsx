@@ -2,15 +2,15 @@ import * as React from 'react';
 import NoteOnMessage from '../../domain/message';
 
 /** 音程の最大値 */
-const MAX_NOTE_NUMBER = 127;
+export const MAX_NOTE_NUMBER = 127;
 /** 平行線の間隔 */
-const X_LINE_SPACING = 15;
+export const X_LINE_SPACING = 15;
 /** 垂直線の間隔 */
-const Y_LINE_SPACING = 48;
+export const Y_LINE_SPACING = 48;
 /** 平行線の初期幅 */
-const X_LINE_LENGTH = 1280;
+export const X_LINE_LENGTH = 1280;
 /** 垂直線の長さ */
-const Y_LINE_LENGTH = X_LINE_SPACING * (MAX_NOTE_NUMBER + 1);
+export const Y_LINE_LENGTH = X_LINE_SPACING * (MAX_NOTE_NUMBER + 1);
 
 export const PianoRoll: React.FunctionComponent<{messages: NoteOnMessage[], addMessage: Function}> = (props) => {
   var xLineLength = X_LINE_LENGTH;
@@ -105,7 +105,7 @@ export const PianoRoll: React.FunctionComponent<{messages: NoteOnMessage[], addM
   }
 
   return (
-    <div className="piano-roll">
+    <div className="main-piano-roll">
       <svg xmlns="http://www.w3.org/2000/svg" id="piano-roll" width={xLineLength} height={Y_LINE_LENGTH} onClick={addMessage}>
       {horizontalPaths()}
       {verticalPaths()}

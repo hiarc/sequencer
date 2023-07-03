@@ -2,8 +2,22 @@
   position: sticky;
 }
 
-.piano-roll{
-  background-color: rgb(50,50,50);
-  height: 800px;
+.main{
+  display: flex;
+}
+
+.main-track-panels{
+  width: 20%;
+}
+
+.main-piano-key{
+  width: 50px;
+  height: 785px;
+}
+
+.main-piano-roll{
+  width: 77%;
+  height: 785px;
   overflow-y: scroll;
+  background-color: rgb(50,50,50);
 }
