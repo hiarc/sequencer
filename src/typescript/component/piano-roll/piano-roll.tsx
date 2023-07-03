@@ -64,7 +64,7 @@ export const PianoRoll: React.FunctionComponent<{
     }
     // yは画面最上部を0にとるが、ノートナンバー（音程）は画面最下部を0とするため最大値を基準にして逆転させる
     const y = (MAX_NOTE_NUMBER - message.noteNumber) * X_LINE_SPACING;
-    return <rect width={width} height={height} x={x} y={y} fill={`#${NOTE_ON_COLOR}`} stroke={`black`} stroke-width={0.1} rx={1} ry={1} key={crypto.randomUUID()}/>
+    return <rect width={width} height={height} x={x} y={y} fill={`#${NOTE_ON_COLOR}`} stroke={`black`} strokeWidth={0.1} rx={1} ry={1} key={crypto.randomUUID()}/>
   });
 
   /**
