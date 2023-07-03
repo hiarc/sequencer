@@ -113,6 +113,7 @@ export const PianoRoll: React.FunctionComponent<{messages: NoteOnMessage[], addM
     const xLineElements = () => {
       const elements = [];
       for(let i = 0; i <= MAX_NOTE_NUMBER + 1; i++){
+        // ピアノロールの最上部の音程Gを0とすると、オクターブの区切りのCは8音目のため、12の余剰が8の時にオクターブの区切りとする。
         const stroke = i % 12 === 8 ? X_OCTAVE_LINE_COLOR : X_LINE_COLOR;
         const direction = `M 0 ${i * X_LINE_SPACING} L ${pianoRollWidth} ${i * X_LINE_SPACING}`;
         const path = <path d={direction} stroke={`#${stroke}`} strokeWidth={1} key={crypto.randomUUID()}/>;
