@@ -24,7 +24,7 @@ export const saveAndDownload = (messages: NoteOnMessage[], filename: string) => 
 }
 
 export const play = (portName: string, tracks: Tracks) => {
-  const data = {portName: portName, tracks: tracks}; 
+  const data = {tracks: tracks, portName: portName}; 
   axios.post('http://localhost:8000/v1.0/player', data)
     .then((response) => console.log(response))
     .catch((error) => console.log(error));

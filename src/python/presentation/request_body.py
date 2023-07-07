@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 import stringcase
 from domain.message import NoteOnMessage
+from domain.track import Track
 
 
 class NoteOnMessageModel(BaseModel):
@@ -45,16 +46,25 @@ class TrackModel(BaseModel):
         alias_generator = stringcase.camelcase
         allow_population_by_field_name = True
 
+    def toDomain(self):
+        messages = list(message.toDomain() for message in self.messages)
+        return Track(
+            self.no,
+            self.name,
+            self.instrumentId,
+            messages,
+        )
+
 
 class PlayRequest(BaseModel):
-    messages: list[NoteOnMessageModel]
+    tracks: list[TrackModel]
     port_name: str
 
     class Config:
         alias_generator = stringcase.camelcase
 
     def toDomain(self):
-        return list(message.toDomain() for message in self.messages)
+        return list(track.toDomain() for track in self.tracks)
 
 
 class SaveRequest(BaseModel):

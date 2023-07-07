@@ -3,6 +3,16 @@ from domain.message import NoteOnMessage
 from domain.parser import Parser
 
 
+class Track:
+    def __init__(
+        self, no: int, name: str, instrumentId: int, messages: list[NoteOnMessage]
+    ) -> None:
+        self.no = no
+        self.name = name
+        self.instrumentId = instrumentId
+        self.messages = messages
+
+
 class MidoTrackHelper:
     @staticmethod
     def mido_system_track():
