@@ -6,17 +6,17 @@ export default class Track {
   instrumentId: number;
   messages: Message[] = [];
 
-  static systemTrack(): Track{
+  static conductorTrack(): Track{
     const track = new Track();
     track.no = 0;
-    track.name = `System Track`;
+    track.name = `Conductor Track`;
 
     return track;
   }
 
   static instrumentalTrack(no: number): Track{
     if(no === 0){
-      throw new Error("Track No.0 is used as System Track.");
+      throw new Error("Track No.0 is used as Conductor Track.");
     }
 
     const track = new Track();
@@ -46,8 +46,9 @@ export class Tracks {
   static default(): Tracks {
     const tracks = [];
 
+    tracks.push(Track.conductorTrack());
     for(let idx = 1; idx <= 16; idx++){
-      const track = Track.instrumentalTrack(tracks.length + 1);
+      const track = Track.instrumentalTrack(idx);
       tracks.push(track);
     }
 
