@@ -59,11 +59,16 @@ export class Tracks {
     this.tracks.push(track);
   }
 
-  select(no: number): Track {
+  get(no: number): Track {
     if(no > this.tracks.length){
       throw new Error("OutOfRangeError.");
     }
 
     return this.tracks[no];
+  }
+
+  addMessage(idx: number, message: Message): void {
+    const track = this.get(idx);
+    track.addMessage(message);
   }
 }

@@ -3,29 +3,29 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import NoteOnMessage from '../../domain/message';
+import { nowDateTime } from '../../common/date-utils';
 import { play, saveAndDownload, selectFile, uploadFile } from '../../repository/repository';
 import { SettingsModal } from './settings-modal';
-import { nowDateTime } from '../../common/date-utils';
+import { Tracks } from '../../domain/track';
 
 export const Header: React.FunctionComponent<{
+  /** 現在選択しているMIDI出力ポート。 */
+  port: string, 
+
   /** 現在開いているMIDIファイル。 */
   file: File,
 
-  /** シーケンサーで入力したノートオンメッセージのリスト。 */
-  messages: NoteOnMessage[], 
+  /** トラックのリスト。 */
+  tracks: Tracks, 
 
-  /** シーケンサーに設定済みのMIDI出力ポート。 */
-  port: string, 
-
-  /** 指定したファイルを、現在開いているMIDIファイルとする。 */
+  /** MIDIファイルを設定する。 */
   setFile: (file: File) => void,
 
-  /** シーケンサーのMIDI出力ポートを設定する。 */
+  /** MIDI出力ポートを設定する。 */
   setPort: (port: string) => void,
 
-  /** ノートオンメッセージをシーケンサーに設定する。 */
-  setMessage: (messages: NoteOnMessage[]) => void
+  /** トラックを設定する。 */
+  setTracks: (tracks: Tracks) => void
 
 }> = (props) => {
 
@@ -34,14 +34,14 @@ export const Header: React.FunctionComponent<{
 
   const openFile = async () => {
     const file = await selectFile();
-    const messages = await uploadFile(file);
+    const tracks = await uploadFile(file);
     props.setFile(file);
-    props.setMessage(messages)
+    props.setTracks(tracks)
   }
 
   const saveAndDownloadFile = () => {
     const filename = `new_file_${nowDateTime()}.mid`;
-    saveAndDownload(props.messages, filename);
+    // saveAndDownload(props.tracks, filename);
   }
   
   return (
@@ -68,7 +68,7 @@ export const Header: React.FunctionComponent<{
               <NavDropdown.Divider />
             </NavDropdown>
             <NavDropdown title="Player" id="header-dropdown-player">
-              <NavDropdown.Item href="#" onClick={() => play(props.messages, props.port)}>Play</NavDropdown.Item>
+              <NavDropdown.Item href="#" onClick={() => play(props.port, props.tracks)}>Play</NavDropdown.Item>
               <NavDropdown.Item href="#">Stop</NavDropdown.Item>
               <NavDropdown.Item href="#">Jump to</NavDropdown.Item>
             </NavDropdown>

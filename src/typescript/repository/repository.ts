@@ -1,5 +1,6 @@
 import axios, { ResponseType } from "axios";
 import NoteOnMessage from "../domain/message";
+import { Tracks } from "../domain/track";
 
 // TODO: FQDNを共通化する
 
@@ -22,8 +23,8 @@ export const saveAndDownload = (messages: NoteOnMessage[], filename: string) => 
   })
 }
 
-export const play = (messages: NoteOnMessage[], portName: string) => {
-  const data = {messages: messages, portName: portName}; 
+export const play = (portName: string, tracks: Tracks) => {
+  const data = {portName: portName, tracks: tracks}; 
   axios.post('http://localhost:8000/v1.0/player', data)
     .then((response) => console.log(response))
     .catch((error) => console.log(error));
