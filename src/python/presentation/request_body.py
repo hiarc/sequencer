@@ -3,7 +3,7 @@ import stringcase
 from domain.message import NoteOnMessage
 
 
-class NoteOnMessageRequest(BaseModel):
+class NoteOnMessageModel(BaseModel):
     note_number: int
     started_at: int
     velocity: int
@@ -27,7 +27,7 @@ class NoteOnMessageRequest(BaseModel):
 
     @staticmethod
     def fromDomain(message: NoteOnMessage):
-        return NoteOnMessageRequest(
+        return NoteOnMessageModel(
             note_number=message.note_number,
             started_at=message.started_at,
             velocity=message.velocity,
@@ -35,8 +35,19 @@ class NoteOnMessageRequest(BaseModel):
         )
 
 
+class TrackModel(BaseModel):
+    no: int
+    name: str
+    instrumentId: int
+    messages: list[NoteOnMessageModel]
+
+    class Config:
+        alias_generator = stringcase.camelcase
+        allow_population_by_field_name = True
+
+
 class PlayRequest(BaseModel):
-    messages: list[NoteOnMessageRequest]
+    messages: list[NoteOnMessageModel]
     port_name: str
 
     class Config:
@@ -47,7 +58,7 @@ class PlayRequest(BaseModel):
 
 
 class SaveRequest(BaseModel):
-    messages: list[NoteOnMessageRequest]
+    messages: list[NoteOnMessageModel]
     filename: str
 
     class Config:

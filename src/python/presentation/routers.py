@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Body, UploadFile
 from fastapi.responses import FileResponse
-from presentation.request_body import SaveRequest, PlayRequest, NoteOnMessageRequest
+from presentation.request_body import SaveRequest, PlayRequest, NoteOnMessageModel
 from domain.player import Player
 from domain.ports import Ports
 from domain.midi_file import MIDIFile
@@ -23,12 +23,10 @@ async def save(body: SaveRequest = Body()):
 
 
 @router.post("/v1.0/upload")
-async def openFile(file: UploadFile) -> list[NoteOnMessageRequest]:
+async def openFile(file: UploadFile) -> list[NoteOnMessageModel]:
     repository.upload(file.file, file.filename)
     messages = MIDIFile.file_to_obj(file.filename)
-    # TODO: 曲のメタ情報（テンポ）やトラック情報を返す
-    # TODO: マルチトラックに対応する
-    return list(NoteOnMessageRequest.fromDomain(message) for message in messages)
+    return list(NoteOnMessageModel.fromDomain(message) for message in messages)
 
 
 @router.post("/v1.0/player")
