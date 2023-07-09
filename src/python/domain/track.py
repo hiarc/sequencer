@@ -15,16 +15,10 @@ class Track:
 
 class MidoTrackHelper:
     @staticmethod
-    def mido_system_track():
-        sys_track = MidiTrack()
-        sys_track.name = "System Track"
-        return sys_track
-
-    @staticmethod
-    def mido_instrument_track(name: str, messages: list[NoteOnMessage]):
+    def mido_instrument_track(track: Track):
         mido_track = MidiTrack()
-        mido_track.name = name
-        for message in Parser.to_mido_messages(messages):
+        mido_track.name = track.name
+        for message in Parser.to_mido_messages(track.messages):
             mido_track.append(message)
         return mido_track
 

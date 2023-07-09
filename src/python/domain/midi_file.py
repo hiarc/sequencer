@@ -1,17 +1,16 @@
 from mido import MidiFile, MidiTrack
 from domain.message import NoteOnMessage
 from domain.track import MidoTrackHelper
+from domain.track import Track
 
 
 class MIDIFile:
-    def __init__(self, messages: list[NoteOnMessage]):
-        # TODO: マルチトラック化する
-        sys_track: MidiTrack = MidoTrackHelper.mido_system_track()
-        track0: MidiTrack = MidoTrackHelper.mido_instrument_track("track0", messages)
-
+    def __init__(self, tracks: list[Track]):
         self.midi: MidiFile = MidiFile(type=1)
-        self.midi.tracks.append(sys_track)
-        self.midi.tracks.append(track0)
+
+        for track in tracks:
+            mido_track: MidiTrack = MidoTrackHelper.mido_instrument_track(track)
+            self.midi.tracks.append(mido_track)
 
     @staticmethod
     def file_to_obj(path: str):

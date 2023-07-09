@@ -3,7 +3,7 @@ import { Message } from "./message";
 export default class Track {
   no: number;
   name: string;
-  instrumentId: number;
+  instrumentId: number = 0; // TODO: GUIから選択できるようにする。
   messages: Message[] = [];
 
   static conductorTrack(): Track{
