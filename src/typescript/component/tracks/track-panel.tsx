@@ -10,7 +10,7 @@ export const TrackPanel: React.FunctionComponent<{track: Track}> = (props) => {
           <i className="bi bi-list-nested"></i>
         </div>
         <div className="p-1 flex-fill">
-          {props.track.getName}
+          {props.track.name}
         </div>
       </div>
     </ListGroup.Item>

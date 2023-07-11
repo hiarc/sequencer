@@ -1,9 +1,10 @@
 from pydantic import BaseModel
 import stringcase
 from domain.message import NoteOnMessage
+from domain.track import Track
 
 
-class NoteOnMessageRequest(BaseModel):
+class NoteOnMessageModel(BaseModel):
     note_number: int
     started_at: int
     velocity: int
@@ -27,7 +28,7 @@ class NoteOnMessageRequest(BaseModel):
 
     @staticmethod
     def fromDomain(message: NoteOnMessage):
-        return NoteOnMessageRequest(
+        return NoteOnMessageModel(
             note_number=message.note_number,
             started_at=message.started_at,
             velocity=message.velocity,
@@ -35,19 +36,51 @@ class NoteOnMessageRequest(BaseModel):
         )
 
 
+class TrackModel(BaseModel):
+    no: int
+    name: str
+    instrument_id: int
+    messages: list[NoteOnMessageModel]
+
+    class Config:
+        alias_generator = stringcase.camelcase
+        allow_population_by_field_name = True
+
+    def toDomain(self):
+        messages = list(message.toDomain() for message in self.messages)
+        return Track(
+            self.no,
+            self.name,
+            self.instrument_id,
+            messages,
+        )
+
+    @staticmethod
+    def fromDomain(track: Track):
+        messages = list(
+            NoteOnMessageModel.fromDomain(message) for message in track.messages
+        )
+        return TrackModel(
+            no=track.no,
+            name=track.name,
+            instrument_id=track.instrument_id,
+            messages=messages,
+        )
+
+
 class PlayRequest(BaseModel):
-    messages: list[NoteOnMessageRequest]
+    tracks: list[TrackModel]
     port_name: str
 
     class Config:
         alias_generator = stringcase.camelcase
 
     def toDomain(self):
-        return list(message.toDomain() for message in self.messages)
+        return list(track.toDomain() for track in self.tracks)
 
 
 class SaveRequest(BaseModel):
-    messages: list[NoteOnMessageRequest]
+    messages: list[NoteOnMessageModel]
     filename: str
 
     class Config:
