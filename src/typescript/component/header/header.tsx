@@ -36,7 +36,7 @@ export const Header: React.FunctionComponent<{
     const file = await selectFile();
     const tracks = await uploadFile(file);
     props.setFile(file);
-    props.setTracks(tracks)
+    props.setTracks(tracks);
   }
 
   const saveAndDownloadFile = () => {

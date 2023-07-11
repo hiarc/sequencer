@@ -39,7 +39,7 @@ class NoteOnMessageModel(BaseModel):
 class TrackModel(BaseModel):
     no: int
     name: str
-    instrumentId: int
+    instrument_id: int
     messages: list[NoteOnMessageModel]
 
     class Config:
@@ -51,8 +51,20 @@ class TrackModel(BaseModel):
         return Track(
             self.no,
             self.name,
-            self.instrumentId,
+            self.instrument_id,
             messages,
+        )
+
+    @staticmethod
+    def fromDomain(track: Track):
+        messages = list(
+            NoteOnMessageModel.fromDomain(message) for message in track.messages
+        )
+        return TrackModel(
+            no=track.no,
+            name=track.name,
+            instrument_id=track.instrument_id,
+            messages=messages,
         )
 
 

@@ -16,7 +16,7 @@ export const Layout: React.FunctionComponent<{}> = (props) => {
   const [file, setFile] = React.useState<File>();
 
   /** 現在選択しているトラックの番号。 */
-  const [trackIdx, setTrackIdx] = React.useState<number>(1);
+  const [trackIdx, setTrackIdx] = React.useState<number>(0);
 
   /** トラックのリスト。 */
   const [tracks, setTracks]= React.useState(Tracks.default());

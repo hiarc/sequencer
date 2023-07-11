@@ -1,6 +1,6 @@
 import axios, { ResponseType } from "axios";
 import NoteOnMessage from "../domain/message";
-import { Tracks } from "../domain/track";
+import Track, { Tracks } from "../domain/track";
 
 // TODO: FQDNを共通化する
 
@@ -40,10 +40,16 @@ export const uploadFile = async (file: File) => {
     formData.set("file", blob, file.name);
 
     const response = await axios.post('http://localhost:8000/v1.0/upload', formData);
-    return response.data.map(
-      message => new NoteOnMessage(
-        message.noteNumber, message.startedAt, message.velocity, message.tick)
+    // TODO: TS側のオブジェクトに変換する処理のリファクタ
+    const tracks = response.data.map(
+      track => {
+        const messages = track.messages.map(message => 
+          new NoteOnMessage(message.noteNumber, message.startedAt, message.velocity, message.tick));
+
+        return new Track(track.no, track.name, track.instrumentId, messages)
+      }
     );
+    return new Tracks(tracks);
 }
 
 export const selectFile = () => {

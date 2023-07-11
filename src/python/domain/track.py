@@ -5,11 +5,11 @@ from domain.parser import Parser
 
 class Track:
     def __init__(
-        self, no: int, name: str, instrumentId: int, messages: list[NoteOnMessage]
+        self, no: int, name: str, instrument_id: int, messages: list[NoteOnMessage]
     ) -> None:
         self.no = no
         self.name = name
-        self.instrumentId = instrumentId
+        self.instrument_id = instrument_id
         self.messages = messages
 
 
@@ -23,5 +23,7 @@ class MidoTrackHelper:
         return mido_track
 
     @staticmethod
-    def to_sequencer_messages(mido_track: MidiTrack[Message]):
-        return Parser.to_sequencer_messages(mido_track)
+    def to_sequencer_track(no: int, mido_track: MidiTrack[Message]):
+        messages = Parser.to_sequencer_messages(mido_track)
+        # TODO: メッセージからinstrument_id を取得できるようにする
+        return Track(no, mido_track.name, 0, messages)

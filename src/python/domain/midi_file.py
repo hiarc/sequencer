@@ -1,5 +1,4 @@
 from mido import MidiFile, MidiTrack
-from domain.message import NoteOnMessage
 from domain.track import MidoTrackHelper
 from domain.track import Track
 
@@ -13,9 +12,10 @@ class MIDIFile:
             self.midi.tracks.append(mido_track)
 
     @staticmethod
-    def file_to_obj(path: str):
+    def file_to_sequencer_model(path: str):
         midi = MidiFile(path)
-        # TODO: マルチトラックに対応する
-        # for track in midi.tracks:
-        #     messages = Track.to_messages(track)
-        return MidoTrackHelper.to_sequencer_messages(midi.tracks[0])
+        tracks = list(
+            MidoTrackHelper.to_sequencer_track(idx, track)
+            for idx, track in enumerate(midi.tracks)
+        )
+        return tracks

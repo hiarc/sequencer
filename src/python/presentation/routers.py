@@ -1,6 +1,11 @@
 from fastapi import APIRouter, Body, UploadFile
 from fastapi.responses import FileResponse
-from presentation.request_body import SaveRequest, PlayRequest, NoteOnMessageModel
+from presentation.request_body import (
+    SaveRequest,
+    PlayRequest,
+    TrackModel,
+    NoteOnMessageModel,
+)
 from domain.player import Player
 from domain.ports import Ports
 from domain.midi_file import MIDIFile
@@ -23,10 +28,10 @@ async def save(body: SaveRequest = Body()):
 
 
 @router.post("/v1.0/upload")
-async def openFile(file: UploadFile) -> list[NoteOnMessageModel]:
+async def openFile(file: UploadFile) -> list[TrackModel]:
     repository.upload(file.file, file.filename)
-    messages = MIDIFile.file_to_obj(file.filename)
-    return list(NoteOnMessageModel.fromDomain(message) for message in messages)
+    tracks = MIDIFile.file_to_sequencer_model(file.filename)
+    return list(TrackModel.fromDomain(track) for track in tracks)
 
 
 @router.post("/v1.0/player")

@@ -6,10 +6,9 @@ export default class Track {
   instrumentId: number = 0; // TODO: GUIから選択できるようにする。
   messages: Message[] = [];
 
+  // TODO: conductorTrack(), instrumentalTrack() の用途が限定的なため、Tracks.default() に処理を移動する
   static conductorTrack(): Track{
-    const track = new Track();
-    track.no = 0;
-    track.name = `Conductor Track`;
+    const track = new Track(0, `Conductor Track`, 0, []);
 
     return track;
   }
@@ -19,11 +18,15 @@ export default class Track {
       throw new Error("Track No.0 is used as Conductor Track.");
     }
 
-    const track = new Track();
-    track.no = no;
-    track.name = `Track${no}`;
-
+    const track = new Track(no, `Track${no}`, 0, []);
     return track;
+  }
+
+  constructor(no: number, name: string, instrumentId: number, messages: Message[]){
+    this.no = no;
+    this.name = name;
+    this.instrumentId = instrumentId;
+    this.messages = messages;
   }
 
   addMessage(message: Message): void {
