@@ -8,6 +8,7 @@
 
 .main-track-panels{
   width: 20%;
+  background-color: var(--bs-list-group-bg);
 }
 
 .main-piano-key{

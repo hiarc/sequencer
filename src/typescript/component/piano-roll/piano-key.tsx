@@ -38,15 +38,13 @@ const whiteKeyElements = () => {
   const rects = [];
   /*
    * 白鍵の始点となるY座標。それぞれの白鍵の高さを加えたものを、次の白鍵の始点にする。
-   * 水平線と最初の白鍵の縦の軸を合わせるために、始点の初期値は負の値をとる。
-   * ピアノロールの最上部の水平線は、最初の白鍵の途中から始まるため。
+   * 水平線と最初の白鍵の縦の軸を合わせるために、ズレを補正する初期値を設定する。
    */
   var totalY = X_LINE_SPACING * 3 - WHITE_KEY_HEIGHT_F * 2;
   for(let i = 0; i <= WHITE_KEY_AMOUNT + 1; i++){
     /*
      * 白鍵は [C, D, E] と [F, G, A, B] でピアノロール上の高さが異なる。そのため高さを分けて算出する。
-     * ピアノロールの最上部はGであり、下側にG, F, E, D…と続く。
-     * 起点0をGとして鍵盤の高さを算出する。
+     * ピアノロールの最上部はGのため、起点0をGとして音程を判定する。
      */
     const height = [0, 1, 5, 6].some(note => i % 7 === note) ? WHITE_KEY_HEIGHT_F : WHITE_KEY_HEIGHT_C;
     const rect = <rect width={CONTAINER_WIDTH} height={height} x={0} y={totalY} fill={`#${WHITE_KEY_COLOR_FILL}`} stroke={`#${WHITE_KEY_COLOR_STROKE}`} key={crypto.randomUUID()}/>

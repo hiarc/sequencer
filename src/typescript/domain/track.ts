@@ -1,44 +1,78 @@
-export default class Track {
-  private no: number;
-  private name: string;
-  private instrumentId: number;
-  private sequenseId: number;
+import { Message } from "./message";
 
-  constructor(no: number){
+export default class Track {
+  no: number;
+  name: string;
+  instrumentId: number = 0; // TODO: GUIから選択できるようにする。
+  messages: Message[] = [];
+
+  // TODO: conductorTrack(), instrumentalTrack() の用途が限定的なため、Tracks.default() に処理を移動する
+  static conductorTrack(): Track{
+    const track = new Track(0, `Conductor Track`, 0, []);
+
+    return track;
+  }
+
+  static instrumentalTrack(no: number): Track{
+    if(no === 0){
+      throw new Error("Track No.0 is used as Conductor Track.");
+    }
+
+    const track = new Track(no, `Track${no}`, 0, []);
+    return track;
+  }
+
+  constructor(no: number, name: string, instrumentId: number, messages: Message[]){
     this.no = no;
-    this.name = `track${no}`;
+    this.name = name;
+    this.instrumentId = instrumentId;
+    this.messages = messages;
   }
-  public get getNo(): number{
-    return this.no;
+
+  addMessage(message: Message): void {
+    this.messages.push(message);
   }
-  public get getName(): string{
-    return this.name;
-  }
+
 }
 
 export class Tracks {
-  private tracks: Track[];
+  tracks: Track[];
+
   constructor(tracks: Track[]){
     this.tracks = tracks;
   }
-  public static empty(): Tracks {
+
+  static empty(): Tracks {
     return new Tracks([]);
   }
-  public static default(): Tracks {
-    let tracks = this.empty();
+
+  static default(): Tracks {
+    const tracks = [];
+
+    tracks.push(Track.conductorTrack());
     for(let idx = 1; idx <= 16; idx++){
-      tracks.add(tracks.size + 1);
+      const track = Track.instrumentalTrack(idx);
+      tracks.push(track);
     }
-    return tracks;
+
+    return new Tracks(tracks);
   }
-  public add(no: number): void {
-    const track = new Track(no);
+
+  add(no: number): void {
+    const track = Track.instrumentalTrack(no);
     this.tracks.push(track);
   }
-  public get asList(): Track[]{
-    return this.tracks;
+
+  get(no: number): Track {
+    if(no > this.tracks.length){
+      throw new Error("OutOfRangeError.");
+    }
+
+    return this.tracks[no];
   }
-  public get size(): number {
-    return this.tracks.length;
+
+  addMessage(idx: number, message: Message): void {
+    const track = this.get(idx);
+    track.addMessage(message);
   }
 }

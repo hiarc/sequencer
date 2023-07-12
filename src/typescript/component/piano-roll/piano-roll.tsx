@@ -1,5 +1,5 @@
 import * as React from 'react';
-import NoteOnMessage from '../../domain/message';
+import NoteOnMessage, { Message } from '../../domain/message';
 
 /** 音程の最大値 */
 export const MAX_NOTE_NUMBER = 127;
@@ -29,16 +29,17 @@ const Y_MEASURE_LINE_COLOR = X_OCTAVE_LINE_COLOR
 
 
 export const PianoRoll: React.FunctionComponent<{
-  messages: NoteOnMessage[], 
+  messages: Message[], 
   addMessage: (message: NoteOnMessage) => void
 }> = (props) => {
 
-  const pianoRollElement = React.useRef(null);
-
+  // 読み込み時に画面中央部までスクロールする。
+  const pianoRollElement = React.useRef(null)
   React.useEffect(() => {
     pianoRollElement.current.scrollTop = PIANO_ROLLE_HEIGHT / 2;
   }, []);
 
+  // ピアノロールを縦スクロールしたら白鍵・黒鍵のスクロールを追従させる。
   const onScroll = (e) => {
     const pianoKey = document.getElementById("piano-key");
     if(!pianoKey){
@@ -55,15 +56,16 @@ export const PianoRoll: React.FunctionComponent<{
    * width は長方形の横幅、height は長方形の縦幅、x 及び y は長方形の左上の開始位置を表す。
    */
   const messageRects = props.messages.map(message => {
-    const width = widthFromTick(message.tick);
+    const noteOn = message as NoteOnMessage;
+    const width = widthFromTick(noteOn.tick);
     const height = X_LINE_SPACING;
-    const x = widthFromTick(message.startedAt);
+    const x = widthFromTick(noteOn.startedAt);
     // x座標＋発声の長さが画面右端に到達したら、水平スクロールを1小説分足す
     if(pianoRollWidth < x + Y_LINE_SPACING * 8){
       pianoRollWidth = x + Y_LINE_SPACING * 8;
     }
     // yは画面最上部を0にとるが、ノートナンバー（音程）は画面最下部を0とするため最大値を基準にして逆転させる
-    const y = (MAX_NOTE_NUMBER - message.noteNumber) * X_LINE_SPACING;
+    const y = (MAX_NOTE_NUMBER - noteOn.noteNumber) * X_LINE_SPACING;
     return <rect width={width} height={height} x={x} y={y} fill={`#${NOTE_ON_COLOR}`} stroke={`black`} strokeWidth={0.1} rx={1} ry={1} key={crypto.randomUUID()}/>
   });
 
@@ -122,10 +124,6 @@ export const PianoRoll: React.FunctionComponent<{
   /**
    * 入力領域の音程を表す平行線のSVG要素。
    * 音程ごと、1オクターブごとに色分けして区切る。
-   * 
-   * path の d は以下の構文を取り、SVG上で直線を表現する。
-   * d="M {x1} {y1} L {x2} {y2}"
-   * 上記のように指定すると、起点（x1y1）から終点（x2y2）に線を引く。
    */
     const xLineElements = () => {
       const elements = [];
