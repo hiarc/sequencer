@@ -4,8 +4,6 @@
 
 - Python 3.11.4
 - FastAPI
-- MySQL 8.0
-- SQLAlchemy 2.0.17
 - Mido 1.2.10
 - Typescript 5.1.3
 - React 18.2.0
@@ -22,11 +20,8 @@
 3. ルートディレクトリで以下のコマンドを実行する
 
 ```shell
-# FastAPI、SQLAlchemy, stringcase, Midoのインストール
-pip3 install "fastapi[all]" stringcase sqlalchemy mido
-
-# DBサーバーの起動（localhost:33306）
-docker compose up -d db
+# 初回のみ：FastAPI、tringcase, Midoのインストール
+pip3 install "fastapi[all]" stringcase mido
 
 # 初回のみ：フロントエンドのライブラリインストール
 npm install
